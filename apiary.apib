@@ -456,9 +456,9 @@ keyword slots to a plan.
         + errors (array[Error addon not found])
 
 
-## Optional Data API features [/api/accounts/{uuid}]
+## Data API features [/api/accounts/{uuid}]
 
-Data API is a higher tier from the standard MarketGoo API. The data scheme of the Data API
+Data API is an optional service included in a higher tier from the standard MarketGoo API. The data scheme of the Data API
 provides deeper and richer information on every account.
 
 For further information ask our **Business Development** team at [partners@marketgoo.com](mailto:partners@marketgoo.com)
@@ -466,6 +466,26 @@ For further information ask our **Business Development** team at [partners@marke
 Basically, with **Data API** enabled, you can get the current snapshot of all of the data
 gathered for the website, from the actual Scores to the list of all the tasks. This gives
 you an incredible opportunity to enrich the user experience into your internal user control panels.
+
+These are some of the most useful request parameters and descriptions you can obtain from our Data API
+
+| Parameters      | Description |
+|-------------|-------------|
+| `created_at`    | Date the account was created. |
+| `product`    | Type of product under MarketGoo portfolio. |
+| `domain`    | Domain name of the account. |
+| `lang`    | Language of the account created. |
+| `thumbnail`    | Obtain a png thumbnail of the site. |
+| `config`    | Set of values such as `cms` the site is running under, `country` as the target, `webmaster_email` in case it was provided. |
+| `scan`    | Set of values about the scanning process. Retrieve `pages_read` that shows how many pages the site has, date of the last scan, detected cms, and detected technology from the site. |
+| `desktop`    | Set of values that show metrics of the website displayed on desktop such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with current and historic measures. |
+| `mobile`    | Set of values that show metrics about the mobile render such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with present and historic measures. Request information about the existence of a responsive or dedicated mobile page with `dedicated` and `responsive` . |
+| `progress`    | Provides information about MarketGoo propietary score separated by marketing area. `global` is the end value when `global_onpage`is the score for onpage SEO and the rest of the score parameters are `visitors`,`sitereview`,`search`,`onpage`,`popularity`,`social` and `mobile`. |
+| `tasks`  | Tasks are the number of recommendations our solution provides to the site owner. We provide data on the total number of tasks, the completed ones, pending, manual tasks and tasks with warnings. There are different parameters to gather specific user behaviour on tasks. For example `configurecomp` let you know if the user has fill any competitor. Other interesting task data includes `wwwspeed`as loading time or `sslexists`to check site SSL configuration. Please refer to the list of tasks in the example or ask for detailed information. |
+| `keywords`  | This group provides information about keyword data including `search_volume` and `rankings` data on Google, Yahoo and BING. The `snippet` one shows meta information on the different search engine queries. |
+| `results` | Metrics are `alexa_rank`,`popularity` metrics such as total number of backlinks, total number of domains linking back, detail of most relevant `links`. Social counts under `social` with Facebook Shares plus Likes and number of Linkedin shares and Google Plus. |
+| `competitors`  |  Allows to retrieve comparative metrics of the user competitors on the selected keywords but also retrieving `results` data on these competitors for traffic such as `alexa_rank`,`popularity` metrics are backlinks pointing to home or domain. |
+| `submission` | Data to inform whether the site is listed in the different search engines including URL snippet. |
 
 ### Get single account with Data API [GET /api/accounts/{uuid}]
 
@@ -4361,8 +4381,6 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                                 "diff": 0,
                                                 "total_days": 336
                                             },
-                                            "links": [
-                                            ],
                                             "domains": [
                                             ]
                                         },
@@ -5920,24 +5938,6 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                                 "diff": 0,
                                                 "total_days": 336
                                             },
-                                            "links": [
-                                                {
-                                                    "from_domain": "www.rusforum.com",
-                                                    "from_page": "/showthread.php?t=4737",
-                                                    "to_page": "/bannerbw.jpg",
-                                                    "title": " Копирайт - Форум: Русские за Границей",
-                                                    "anchor": "http://www.rococotoypoodles.com/bannerbw.jpg",
-                                                    "seen_at": "2017-08-26T16:32:12+0000"
-                                                },
-                                                {
-                                                    "from_domain": "www.rusforum.com",
-                                                    "from_page": "/showthread.php?t=4737",
-                                                    "to_page": "/bannerbw.jpg",
-                                                    "title": " Копирайт - Форум: Русские за Границей",
-                                                    "anchor": "http://www.rococotoypoodles.com/bannerbw.jpg",
-                                                    "seen_at": "2017-09-25T16:32:25+0000"
-                                                }
-                                            ],
                                             "domains": [
                                                 {
                                                     "name": "www.rusforum.com",
@@ -6413,40 +6413,6 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                         "diff": 0,
                                         "total_days": 336
                                     },
-                                    "links": [
-                                        {
-                                            "from_domain": "applicacious.com",
-                                            "from_page": "/5-must-read-web-marketing-articles-for-smbs/",
-                                            "to_page": "/blog/2015/06/12/5-must-read-web-marketing-articles-for-smbs/",
-                                            "title": "5 Must Read Web Marketing Articles for SMBs | Applicacious",
-                                            "anchor": "5 Must Read Web Marketing Articles for SMBs",
-                                            "seen_at": "2017-02-22T14:26:46+0000"
-                                        },
-                                        {
-                                            "from_domain": "bin.mediatemple.net",
-                                            "from_page": "/newsletter/july-2013-partners-promo/index.html",
-                                            "to_page": "/?promo=mt",
-                                            "title": "",
-                                            "anchor": "",
-                                            "seen_at": "2017-06-25T14:26:18+0000"
-                                        },
-                                        {
-                                            "from_domain": "blog.bablic.com",
-                                            "from_page": "/page/2/",
-                                            "to_page": "/features/",
-                                            "title": "",
-                                            "anchor": "with a plan",
-                                            "seen_at": "2017-02-22T14:26:46+0000"
-                                        },
-                                        {
-                                            "from_domain": "blog.epages.com",
-                                            "from_page": "/es/2016/01/08/nuevas-plantillas-y-funciones-para-tu-tienda-online-con-la-tienda-de-apps-y-plantillas/",
-                                            "to_page": "/es/",
-                                            "title": "",
-                                            "anchor": "Marketgoo",
-                                            "seen_at": "2017-02-22T14:26:46+0000"
-                                        }
-                                    ],
                                     "domains": [
                                         {
                                             "name": "applicacious.com",
@@ -9270,5 +9236,3 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + lang: `en` (string, optional) - The new language for the user
 + country: `us` (string, optional) - The new country for the user
 + promo: `xmas-promo` (string, optional) - The new desired promotional code
-
-
