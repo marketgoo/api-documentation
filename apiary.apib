@@ -456,6 +456,151 @@ keyword slots to a plan.
         + errors (array[Error addon not found])
 
 
+## Working with SEO Reports [/api/reports]
+
+SEO Reports are one shot reports about a website. They don't require an active account and all reports
+are public and viewable for everyone without requiring to log in. SEO Reports are also shared
+(multi tiered) so an SEO Report for a certain website might have been created already by other user.
+
+The public nature of our SEO Reports leads to the following main characteristics:
+
+* An SEO Report is a **one shot report** to check the SEO performance of a Website.
+* Every SEO Report is **public and viewable for everyone**, even when created from the private API.
+* Each SEO Report is cached for **15 days**. In other words, a new request for a report for the same website returns
+the same data for the next 15 days after the first request, in which time the SEO Report is generated again.
+* Each SEO Report is then **saved forever** (no date of expiration), so you must recreate each SEO Report to
+reflect the new SEO performance every 15 days.
+* The SEO Score for a SEO Report might or **might not** be the same as the Score stated in a SEO Plan,
+although chances are the Score is the same or very close to.
+* Creating an SEO Report, either new or refreshing a new one, will take aproximately from 5 to 10 minutes,
+depending on the speed of the checked website.
+
+
+### Get multiple SEO Reports [GET /api/reports?page[limit]={page[limit]}&page[offset]={page[offset]}&filter[type]={filter[type]}&filter[promo]={filter[promo]}}]
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Parameters
+    + page[limit]: 10 (number, optional) - Number of reports to retrieve in each page
+        + Default: 100
+    + page[offset]: 0 (number, optional) - Start listing reports at this item offset (zero based)
+        + Default: 0
+    + filter[promo]: null (string, optional) - Retrieve only reports matching this promo
+        + Default: null
+    + filter[type]: `website-report` (enum[string], optional) - Retrieve only reports matching this type
+        + Default: `website-report`
+        + Members
+            + `website-report`
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + data (array[Report request json])
+        + meta (Meta)
+        + links (Links reports)
+
+
+### Get SEO Report [GET /api/reports/{uuid}]
+
++ Parameters
+    + uuid: `1779d0d3e381abf98f1d504fc3d0b140b07ff697` (string, required) - UUID of the SEO Report to retrieve
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + data
+            + type: `website-report`
+            + id: `1779d0d3e381abf98f1d504fc3d0b140b07ff697`
+            + attributes (Report base)
+
+
+### Create SEO Report [POST /api/reports]
+
+Sending a POST request to create a new SEO Report will yield one of two different objects:
+
+* If the request will CREATE a new SEO Report, or will REFRESH an existent SEO Report, it
+returns a `202 Accepted` status code and creates a new "SEO Report Request" (returned in the
+body payload and in the `Content-Location` header). You are required to **poll** the endpoint
+returned in the `Content-Location` header regularly until the Report is created.
+(See "Get SEO Report Request Status")
+
+* If the request is for a cached domain and **will not** create a new SEO Report request, it
+returns a `201 Created` response with the SEO Report as payload.
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
+    + Attributes
+        + data
+            + type: `website-report` (string, required) - Required json:api item type. Always `website-report`.
+            + attributes (Report post parameters)
+
++ Response 201 (application/vnd.marketgoo.api+json)
+    + Headers
+
+            Location: https://app.acmeseo.com/api/accounts/1cbd65c81e6462906c8f4eaf02417d3cae667ffb
+
+    + Attributes
+        + data
+            + type: `report-request`
+            + attributes (Report Request)
+
++ Response 202 (application/vnd.marketgoo.api+json)
+    + Headers
+
+            Content-Location: https://app.acmeseo.com/api/report-requests/70308c62a84c3359d13563ddb10486c3af694bad
+
+    + Attributes
+        + data
+            + type: `report-request`
+            + id: `70308c62a84c3359d13563ddb10486c3af694bad`
+            + attributes (Report Request)
+
++ Response 400 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error post])
+
+
+### Get SEO Report Request status [GET /api/report-request/{uuid}]
+
++ Parameters
+    + uuid: `70308c62a84c3359d13563ddb10486c3af694bad` (string, required) - UUID of the Report Request to retrieve
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + data
+            + type: `report-request`
+            + id: `70308c62a84c3359d13563ddb10486c3af694bad`
+            + attributes (Report Request)
+
++ Response 303 (application/vnd.marketgoo.api+json)
+    + Headers
+
+            Location: https://app.acmeseo.com/api/reports/1779d0d3e381abf98f1d504fc3d0b140b07ff697
+
+
+
 ## Data API features [/api/accounts/{uuid}]
 
 Data API is an optional service included in a higher tier from the standard MarketGoo API. The data scheme of the Data API
@@ -8942,6 +9087,719 @@ Using the same single account endpoint the **Data API** returns a much richer in
             }
 
 
+### Get single report with Data API [GET /api/reports/{uuid}]
+
+Using the same single account endpoint the **Data API** returns a much richer information.
+
++ Parameters
+    + uuid: `1779d0d3e381abf98f1d504fc3d0b140b07ff697` (string, required) - UUID of the Website Report to retrieve
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Body
+
+            {
+                "data": {
+                    "type": "website-report",
+                    "id": "1779d0d3e381abf98f1d504fc3d0b140b07ff697",
+                    "attributes": {
+                        "type": "website-report",
+                        "uuid": "1779d0d3e381abf98f1d504fc3d0b140b07ff697",
+                        "domain": "www.marketgoo.com",
+                        "cached_until": "2018-03-15T01:40:13Z",
+                        "created_at": "2018-02-28T01:40:13Z",
+                        "finished_at": "2018-02-28T01:41:49Z",
+                        "country": "us",
+                        "status": 100,
+                        "pages": 50,
+                        "home_title": "MarketGoo - Easy SEO Tools for Small Businesses",
+                        "home_description": "Improve your SEO, increase your website traffic and rankings with our easy SEO tools ideal for Small Businesses. 10 day free trial!",
+                        "thumbnail": "fb8a42eaaad1eaf41f73e3643140e8f87a15f057.png",
+                        "scores": {
+                            "global": 81,
+                            "visitors": 90,
+                            "site_review": 100,
+                            "search_optimization": 35,
+                            "content": 75,
+                            "mobile": 100,
+                            "popularity": 65,
+                            "social": 100
+                        },
+                        "timings": {
+                            "desktop": {
+                                "width": 1440,
+                                "height": 8434,
+                                "size": 1288179,
+                                "size_cached": 788709,
+                                "speed": 2072,
+                                "speed_content": 1475
+                            },
+                            "mobile": {
+                                "width": 345,
+                                "height": 12735,
+                                "size": 1371951,
+                                "size_cached": 780742,
+                                "speed": 2549,
+                                "speed_content": 2089
+                            },
+                            "tablet": {
+                                "width": 1024,
+                                "height": 8614,
+                                "size": 1352524,
+                                "size_cached": 866619,
+                                "speed": 1933,
+                                "speed_content": 1470
+                            }
+                        },
+                        "results": {
+                            "alexa_rank": 5425,
+                            "google_pagerank": 1,
+                            "inbound_links": {
+                                "count": 50,
+                                "from_domains": 93,
+                                "best_domains": [
+                                    "www.test-domain-15.com",
+                                    "www.test-domain-17.com",
+                                    "www.test-domain-24.com",
+                                    "www.test-domain-25.com",
+                                    "www.test-domain-26.com",
+                                    "www.test-domain-40.com",
+                                    "www.test-domain-48.com",
+                                    "www.test-domain-59.com",
+                                    "www.test-domain-61.com",
+                                    "www.test-domain-80.com"
+                                ]
+                            },
+                            "social": {
+                                "linkedin_shares": 61,
+                                "facebook_likes": 82,
+                                "facebook_shares": 52,
+                                "google_plus_mentions": 56
+                            }
+                        },
+                        "checks": {
+                            "error_page": {
+                                "pass": true
+                            },
+                            "no404": {
+                                "pass": true
+                            },
+                            "samecont": {
+                                "pass": true,
+                                "metadata": {
+                                    "redir_type": 301,
+                                    "source_url": "marketgoo.com",
+                                    "target_url": "www.marketgoo.com"
+                                }
+                            },
+                            "sitemap": {
+                                "pass": true,
+                                "metadata": {
+                                    "sitemap_url": "/sitemap.xml"
+                                }
+                            },
+                            "sitemap_robotstxt": {
+                                "pass": false
+                            },
+                            "imgalt": {
+                                "pass": false,
+                                "metadata": {
+                                    "pages": [
+                                        {
+                                            "description": "Give your customers the marketing expertise they crave! Partner with MarketGoo. White-label available.",
+                                            "title": "Partners - MarketGoo",
+                                            "url": "www.marketgoo.com/partners/"
+                                        }
+                                    ],
+                                    "pages_count": 1,
+                                    "images_count": 4,
+                                    "failed_images_count": 1,
+                                    "failed_images_percent": 0.25
+                                }
+                            },
+                            "imgattr": {
+                                "pass": false,
+                                "metadata": {
+                                    "pages": [
+                                        {
+                                            "description": "Welcome Weebly user! If you’re here, you’re aware of the importance of SEO (search engine optimisation) for your Weebly site. Perhaps you are not clear on what exactly it means or how much you should be working on it, but you know you need it.  So how badly do you need it? Well, 89% of […]",
+                                            "title": "How to easily improve your Weebly website SEO? - MarketGoo",
+                                            "url": "www.marketgoo.com/how-to-easily-improve-your-weebly-website-seo/"
+                                        },
+                                        {
+                                            "description": "SEO for your Wix site was never this easy. Do-It-Yourself with our app & see your rankings start climbing!",
+                                            "title": "Easy SEO for Wix sites",
+                                            "url": "www.marketgoo.com/easy-wix-seo"
+                                        },
+                                        {
+                                            "description": "SEO for your Shopify site was never this easy. Do-It-Yourself with our app & see your rankings and traffic start climbing!",
+                                            "title": "Easy SEO for Shopify sites",
+                                            "url": "www.marketgoo.com/easy-shopify-seo"
+                                        },
+                                        {
+                                            "description": "How do you better serve your clients & boost your bottom line? With MarketGoo Agency Pack!",
+                                            "title": "Agencies - MarketGoo",
+                                            "url": "www.marketgoo.com/agencies/"
+                                        },
+                                        {
+                                            "description": "Meet Goo & the team behind MarketGoo to see why we're right for you!",
+                                            "title": "About - MarketGoo",
+                                            "url": "www.marketgoo.com/about-us/"
+                                        },
+                                        {
+                                            "description": "Haz crecer tu negocio escalando tus servicios de SEO y Marketing Web con MarketGoo.",
+                                            "title": "Agencias - MarketGoo",
+                                            "url": "www.marketgoo.com/es/agencias/"
+                                        }
+                                    ],
+                                    "pages_count": 6,
+                                    "images_count": 36
+                                }
+                            },
+                            "longdesc": {
+                                "pass": false,
+                                "metadata": {
+                                    "pages": [
+                                        {
+                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "title": "Improve the SEO for your Squarespace Site!",
+                                            "url": "www.marketgoo.com/squarespace-seo-best-practices"
+                                        },
+                                        {
+                                            "description": "Google recently posted a very enthusiastic post about HTTPS. If you’re a MarketGoo user, you know we check whether your site has an SSL certificate because it plays a part in your search engine ranking and is especially important if you sell any product or service through your website. Early this year we already recognised […]",
+                                            "title": "HTTPS and SSL Explained - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2016/11/10/https-ssl-weebly-wix-wordpress/"
+                                        },
+                                        {
+                                            "description": "Thanks to Katy Carlisle, Squarespace expert at The Wheel Exists, for writing this super informative article for our readers! If you haven’t come across it before, Squarespace is a tool that makes it really easy to create and maintain your own website. As well as being a fantastic platform for blogging, it can also be used […]",
+                                            "title": "How to Blog Using Squarespace - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2017/06/13/how-to-blog-using-squarespace/"
+                                        },
+                                        {
+                                            "description": "Política de cookies ¿Qué es una cookie? Las cookies son unos pequeños archivos de texto que se instalan en tu ordenador, móvil o tableta y que contienen información sobre lo que has hecho en esta web. Esta información se utiliza para cosas tan útiles como que no tengas que meter tu usuario y contraseña cada […]",
+                                            "title": "Política de privacidad - MarketGoo",
+                                            "url": "www.marketgoo.com/es/politica-de-privacidad-2/"
+                                        },
+                                        {
+                                            "description": "Practices That Are Controversial, But Don’t Directly Affect Google Rankings Thanks to Ashley Lipman for this week’s guest post! Many Variables When it comes to Google rankings in terms of website authority, keep one thing in mind: the way by which things are ranked is in constant flux. It is in constant flux because technology […]",
+                                            "title": "Controversial Practises that Don’t Directly Affect SEO - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2018/02/06/google-doesnt-care-about/"
+                                        },
+                                        {
+                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "title": "Improve the SEO for your Squarespace Site!",
+                                            "url": "www.marketgoo.com/squarespace-seo-best-practices/"
+                                        },
+                                        {
+                                            "description": "What is a Contact Form? If you have ever wanted to get in touch with a business that has a website, chances are you’ve ended up on their “Contact Us” page which probably had their numbers, maybe some social profiles, and a contact form.  While this seems simple enough, there are many businesses that neglect […]",
+                                            "title": "Web Marketing: Contact Forms - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2016/05/25/contact-forms-wix-weebly-squarespace"
+                                        },
+                                        {
+                                            "description": "It’s exciting having well known personalities on our platform, and we’re delighted to present Mary Lado Stoutz, who has a website dedicated to retail with a focus on workout clothing. Let’s see what she had to say about using her website to promote her business: Person behind the Business:  Mary Lado Stoutz Location: New orleans, […]",
+                                            "title": "Small Business Spotlight: Mary Lado Stoutz of Mary Lado 180 - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2018/01/26/smb-seo-mary-lado-180/"
+                                        },
+                                        {
+                                            "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
+                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress/"
+                                        },
+                                        {
+                                            "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
+                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress"
+                                        },
+                                        {
+                                            "description": "Welcome Weebly user! If you’re here, you’re aware of the importance of SEO (search engine optimisation) for your Weebly site. Perhaps you are not clear on what exactly it means or how much you should be working on it, but you know you need it.  So how badly do you need it? Well, 89% of […]",
+                                            "title": "How to easily improve your Weebly website SEO? - MarketGoo",
+                                            "url": "www.marketgoo.com/how-to-easily-improve-your-weebly-website-seo/"
+                                        }
+                                    ],
+                                    "pages_count": 11
+                                }
+                            },
+                            "longtitle": {
+                                "pass": false,
+                                "metadata": {
+                                    "pages": [
+                                        {
+                                            "description": "Practices That Are Controversial, But Don’t Directly Affect Google Rankings Thanks to Ashley Lipman for this week’s guest post! Many Variables When it comes to Google rankings in terms of website authority, keep one thing in mind: the way by which things are ranked is in constant flux. It is in constant flux because technology […]",
+                                            "title": "Controversial Practises that Don’t Directly Affect SEO - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2018/02/06/google-doesnt-care-about/"
+                                        },
+                                        {
+                                            "description": "It’s exciting having well known personalities on our platform, and we’re delighted to present Mary Lado Stoutz, who has a website dedicated to retail with a focus on workout clothing. Let’s see what she had to say about using her website to promote her business: Person behind the Business:  Mary Lado Stoutz Location: New orleans, […]",
+                                            "title": "Small Business Spotlight: Mary Lado Stoutz of Mary Lado 180 - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2018/01/26/smb-seo-mary-lado-180/"
+                                        }
+                                    ],
+                                    "pages_count": 2
+                                }
+                            },
+                            "longurl": {
+                                "pass": true
+                            },
+                            "manylinks": {
+                                "pass": true
+                            },
+                            "nodesc": {
+                                "pass": false,
+                                "metadata": {
+                                    "pages": [
+                                        {
+                                            "description": "",
+                                            "title": "Academy Archives - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/category/academy/"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "Email Protection | Cloudflare",
+                                            "url": "www.marketgoo.com/cdn-cgi/l/email-protection"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=sslanding&utm_medium=intro&utm_campaign=cms"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "Guest Posts for MarketGoo Archives - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/category/guest-posts-for-marketgoo/"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "SEO & Website Marketing Tips Archives - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/category/seo-website-marketing-tips/"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=Landing&utm_medium=WP&utm_campaign=CTA2"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=shopify"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=wix"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "Small Business Spotlight Archives - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/category/small-business-spotlight/"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "SEO Cheatsheets Archives - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/category/seo-website-marketing-tips/seo-cheatsheets/"
+                                        }
+                                    ],
+                                    "pages_count": 10
+                                }
+                            },
+                            "noh1": {
+                                "pass": false,
+                                "metadata": {
+                                    "pages": [
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=Landing&utm_medium=WP&utm_campaign=CTA2"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=shopify"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=sslanding&utm_medium=intro&utm_campaign=cms"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=wix"
+                                        }
+                                    ],
+                                    "pages_count": 4
+                                }
+                            },
+                            "noindex": {
+                                "pass": false,
+                                "metadata": {
+                                    "pages": [
+                                        {
+                                            "description": "SEO for your Wix site was never this easy. Do-It-Yourself with our app & see your rankings start climbing!",
+                                            "title": "Easy SEO for Wix sites",
+                                            "url": "www.marketgoo.com/easy-wix-seo"
+                                        },
+                                        {
+                                            "description": "SEO for your Shopify site was never this easy. Do-It-Yourself with our app & see your rankings and traffic start climbing!",
+                                            "title": "Easy SEO for Shopify sites",
+                                            "url": "www.marketgoo.com/easy-shopify-seo"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "Email Protection | Cloudflare",
+                                            "url": "www.marketgoo.com/cdn-cgi/l/email-protection"
+                                        }
+                                    ],
+                                    "pages_count": 3
+                                }
+                            },
+                            "notitle": {
+                                "pass": true
+                            },
+                            "robotstxt": {
+                                "pass": true
+                            },
+                            "dupedesc": {
+                                "pass": false,
+                                "metadata": {
+                                    "pages": [
+                                        {
+                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "title": "Improve the SEO for your Squarespace Site!",
+                                            "url": "www.marketgoo.com/squarespace-seo-best-practices/"
+                                        },
+                                        {
+                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "MarketGoo's Blog",
+                                            "url": "www.marketgoo.com/blog/"
+                                        },
+                                        {
+                                            "description": "Marketing Web y SEO para PyMEs y Agencias, sin distracciones. Evalúa tu sitio y comienza a optimizar. Prueba gratis 10 días.",
+                                            "title": "MarketGoo - SEO y Marketing Web",
+                                            "url": "www.marketgoo.com/es"
+                                        },
+                                        {
+                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "MarketGoo's Blog",
+                                            "url": "www.marketgoo.com/blog/page/2/"
+                                        },
+                                        {
+                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "MarketGoo's Blog",
+                                            "url": "www.marketgoo.com/blog/page/3/"
+                                        },
+                                        {
+                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "MarketGoo's Blog",
+                                            "url": "www.marketgoo.com/blog/page/22/"
+                                        },
+                                        {
+                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "title": "Improve the SEO for your Squarespace Site!",
+                                            "url": "www.marketgoo.com/squarespace-seo-best-practices"
+                                        },
+                                        {
+                                            "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
+                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress/"
+                                        },
+                                        {
+                                            "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
+                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress"
+                                        },
+                                        {
+                                            "description": "Marketing Web y SEO para PyMEs y Agencias, sin distracciones. Evalúa tu sitio y comienza a optimizar. Prueba gratis 10 días.",
+                                            "title": "MarketGoo - SEO y Marketing Web",
+                                            "url": "www.marketgoo.com/es/"
+                                        },
+                                        {
+                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "MarketGoo's Blog",
+                                            "url": "www.marketgoo.com/es/blog/"
+                                        }
+                                    ],
+                                    "pages_count": 11,
+                                    "duplicate_count": 4
+                                }
+                            },
+                            "dupetitle": {
+                                "pass": false,
+                                "metadata": {
+                                    "pages": [
+                                        {
+                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "title": "Improve the SEO for your Squarespace Site!",
+                                            "url": "www.marketgoo.com/squarespace-seo-best-practices/"
+                                        },
+                                        {
+                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "MarketGoo's Blog",
+                                            "url": "www.marketgoo.com/blog/"
+                                        },
+                                        {
+                                            "description": "Marketing Web y SEO para PyMEs y Agencias, sin distracciones. Evalúa tu sitio y comienza a optimizar. Prueba gratis 10 días.",
+                                            "title": "MarketGoo - SEO y Marketing Web",
+                                            "url": "www.marketgoo.com/es"
+                                        },
+                                        {
+                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "MarketGoo's Blog",
+                                            "url": "www.marketgoo.com/blog/page/2/"
+                                        },
+                                        {
+                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "MarketGoo's Blog",
+                                            "url": "www.marketgoo.com/blog/page/3/"
+                                        },
+                                        {
+                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "MarketGoo's Blog",
+                                            "url": "www.marketgoo.com/blog/page/22/"
+                                        },
+                                        {
+                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "title": "Improve the SEO for your Squarespace Site!",
+                                            "url": "www.marketgoo.com/squarespace-seo-best-practices"
+                                        },
+                                        {
+                                            "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
+                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress/"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=Landing&utm_medium=WP&utm_campaign=CTA2"
+                                        },
+                                        {
+                                            "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
+                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=shopify"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=sslanding&utm_medium=intro&utm_campaign=cms"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=wix"
+                                        },
+                                        {
+                                            "description": "Marketing Web y SEO para PyMEs y Agencias, sin distracciones. Evalúa tu sitio y comienza a optimizar. Prueba gratis 10 días.",
+                                            "title": "MarketGoo - SEO y Marketing Web",
+                                            "url": "www.marketgoo.com/es/"
+                                        },
+                                        {
+                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "MarketGoo's Blog",
+                                            "url": "www.marketgoo.com/es/blog/"
+                                        }
+                                    ],
+                                    "pages_count": 15,
+                                    "duplicate_count": 5
+                                }
+                            },
+                            "urldesc": {
+                                "pass": false,
+                                "metadata": {
+                                    "pages": [
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=sslanding&utm_medium=intro&utm_campaign=cms"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=Landing&utm_medium=WP&utm_campaign=CTA2"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=shopify"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=wix"
+                                        }
+                                    ],
+                                    "pages_count": 4,
+                                    "failed_url_percent": 0.080000000000000002,
+                                    "descriptive_url_percent": 0.92000000000000004
+                                }
+                            },
+                            "blog": {
+                                "pass": true,
+                                "metadata": {
+                                    "blog_url": "http://blog.marketgoo.com"
+                                }
+                            },
+                            "content_ratio": {
+                                "pass": false,
+                                "metadata": {
+                                    "pages": [
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=Landing&utm_medium=WP&utm_campaign=CTA2"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=shopify"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=sslanding&utm_medium=intro&utm_campaign=cms"
+                                        },
+                                        {
+                                            "description": "",
+                                            "title": "MarketGoo",
+                                            "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=wix"
+                                        }
+                                    ],
+                                    "pages_count": 4
+                                }
+                            },
+                            "forms": {
+                                "pass": true
+                            },
+                            "ssl_enabled": {
+                                "pass": true,
+                                "metadata": {
+                                    "cert": {
+                                        "alternate_names": [
+                                            "marketgoo.com"
+                                        ],
+                                        "issuer": {
+                                            "common_name": "COMODO ECC Domain Validation Secure Server CA 2",
+                                            "locality": "Salford",
+                                            "organization": "COMODO CA Limited",
+                                            "state": "Greater Manchester"
+                                        },
+                                        "not_after": "2018-08-31T23:59:59",
+                                        "not_before": "2018-02-22T00:00:00",
+                                        "subject": {
+                                            "common_name": "sni47221.cloudflaressl.com",
+                                            "organizational_unit": "PositiveSSL Multi-Domain"
+                                        },
+                                        "version": 2
+                                    },
+                                    "cert_chain": [
+                                        {
+                                            "alternate_names": [
+                                                "marketgoo.com"
+                                            ],
+                                            "issuer": {
+                                                "common_name": "COMODO ECC Domain Validation Secure Server CA 2",
+                                                "locality": "Salford",
+                                                "organization": "COMODO CA Limited",
+                                                "state": "Greater Manchester"
+                                            },
+                                            "not_after": "2018-08-31T23:59:59",
+                                            "not_before": "2018-02-22T00:00:00",
+                                            "subject": {
+                                                "common_name": "sni47221.cloudflaressl.com",
+                                                "organizational_unit": "PositiveSSL Multi-Domain"
+                                            },
+                                            "version": 2
+                                        },
+                                        {
+                                            "issuer": {
+                                                "common_name": "COMODO ECC Certification Authority",
+                                                "locality": "Salford",
+                                                "organization": "COMODO CA Limited",
+                                                "state": "Greater Manchester"
+                                            },
+                                            "not_after": "2029-09-24T23:59:59",
+                                            "not_before": "2014-09-25T00:00:00",
+                                            "subject": {
+                                                "common_name": "COMODO ECC Domain Validation Secure Server CA 2",
+                                                "locality": "Salford",
+                                                "organization": "COMODO CA Limited",
+                                                "state": "Greater Manchester"
+                                            },
+                                            "version": 2
+                                        },
+                                        {
+                                            "issuer": {
+                                                "common_name": "AddTrust External CA Root",
+                                                "organization": "AddTrust AB",
+                                                "organizational_unit": "AddTrust External TTP Network"
+                                            },
+                                            "not_after": "2020-05-30T10:48:38",
+                                            "not_before": "2000-05-30T10:48:38",
+                                            "subject": {
+                                                "common_name": "COMODO ECC Certification Authority",
+                                                "locality": "Salford",
+                                                "organization": "COMODO CA Limited",
+                                                "state": "Greater Manchester"
+                                            },
+                                            "version": 2
+                                        }
+                                    ]
+                                }
+                            },
+                            "mobile_optimized": {
+                                "pass": true
+                            },
+                            "mobile_redirects": {
+                                "pass": false
+                            }
+                        },
+                        "keywords": [
+                            {
+                                "keyword": "keyword-01",
+                                "target_page": "",
+                                "ranking": 4,
+                                "search_volume": 6473,
+                                "traffic_percent": 53.444299999999998,
+                                "traffic_cost": 36.524700000000003,
+                                "competition": 0.50868800000000003,
+                                "volume": 92511
+                            },
+                            {
+                                "keyword": "keyword-02",
+                                "target_page": "",
+                                "ranking": 26,
+                                "search_volume": 4788,
+                                "traffic_percent": 58.399099999999997,
+                                "traffic_cost": 11.1158,
+                                "competition": 0.72765899999999994,
+                                "volume": 48220
+                            },
+                            {
+                                "keyword": "keyword-03",
+                                "target_page": "",
+                                "ranking": 9,
+                                "search_volume": 4337,
+                                "traffic_percent": 59.050400000000003,
+                                "traffic_cost": 73.273499999999999,
+                                "competition": 0.66538699999999995,
+                                "volume": 29835
+                            }
+                        ]
+                    }
+                }
+            }
+
+
+
 
 ## Data Structures
 
@@ -9121,6 +9979,13 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + prev (string, nullable) - Link to the previous page of the collection
 
 
+### Links reports (object)
++ first: `/api/reports?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the first page of the collection
++ last: `/api/reports?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the last page of the collection
++ next (string, nullable) - Link to the next page of the collection
++ prev (string, nullable) - Link to the previous page of the collection
+
+
 ### Account base (object)
 + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string) - The unique resource identifier for this Account
 + promo: `xmas-promo` (string, nullable) - The Promo
@@ -9185,6 +10050,26 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + attributes (Account base)
 
 
+### Report base (object)
++ type: `website-report`
++ uuid: `1779d0d3e381abf98f1d504fc3d0b140b07ff697`
++ domain: `www.marketgoo.com`
++ cached_until: `2018-04-12T16:12:07Z`
++ created_at: `2018-03-28T16:12:07Z`
++ finished_at: `2018-03-28T16:50:42Z`
++ country: `us`
++ status: 100
++ pages: 50
++ home_title: `MarketGoo - Easy SEO Tools for Small Businesses`
++ home_description: `Improve your SEO, increase your website traffic and rankings with our easy SEO tools ideal for Small Businesses. 10 day free trial!`
++ thumbnail: `fb8a42eaaad1eaf41f73e3643140e8f87a15f057.png`
+
+
+### Report request json (object)
++ type: `report-request`
++ id: `b7e1b8f8b6290abd2c284941f7f488764a36cf93`
++ attributes (Report base)
+
 ### Account post parameters (object)
 + domain: `www.marketgoo.com` (string, required) - The domain of the web site
 + product: `evolution` (string, required) - The product to use for the new account
@@ -9236,3 +10121,49 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + lang: `en` (string, optional) - The new language for the user
 + country: `us` (string, optional) - The new country for the user
 + promo: `xmas-promo` (string, optional) - The new desired promotional code
+
+
+### Report post parameters (object)
++ domain: `www.marketgoo.com` (string, required) - The domain of the web site to check
++ email: `john@doe.com` (string, optional)
+
+    The email of the user to send the report to. Leave blank (do not include it in the
+    payload) if you don't want to send an email to the user.
+
++ country: `us` (string, optional)
+
+    The desired target country for the report. It is the `ISO 3166-1 alpha-2` code and
+    the full range of countries is accepted.
+
+    This parameter is **optional**. It defaults to **your default country** and
+    will be replaced with the domain country TLD if there is one.
+
+    For example, if you **do not provide** any country in the request and the domain
+    is `great-britain.co.uk`, the country will be automatically assigned as `gb`,
+    regardless of your default configured country.
+
++ promo: `xmas-promo` (string, optional)
+
+    This is a free field you can use to "tag" reports for promotional purposes.
+    For example, you can tag reports as `xmas-promo` as part of a Christmas promotion
+    so that you can later filter how many reports have been created as part of
+    this promotion.
+
+    However, since this is a **free field**, you can also use it to "tag" any internal
+    code or ID you might need instead of promotional codes. For example, you can use
+    `ABCD-1234` as `promo` in case you might need to link the report to some internal
+    code.
+
+    The `promo` field is limited to **100 characters** matching `[-_a-zA-Z0-9]{100}`.
+
+
+### Report Request (object)
++ state: `starting` (string)
++ title: `Report accepted for processing.` (string)
++ `percent-complete`: 0 (number)
+
+
+### Report Request processing (object)
++ state: `processing` (string)
++ title: `Report still processing.` (string)
++ `percent-complete`: 25 (number)
