@@ -77,10 +77,10 @@ Example `meta` and `links` object from a paginated response:
         "total_pages": 10
     },
     "links": {
-        "first": "/api/accounts?page[limit]=10&page[offset]=0",
-        "last": "/api/accounts?page[limit]=10&page[offset]=90",
+        "first": "https://app.acmeseo.com/api/accounts?page[limit]=10&page[offset]=0",
+        "last": "https://app.acmeseo.com/api/accounts?page[limit]=10&page[offset]=90",
         "prev": null,
-        "next": "/api/accounts?page[limit]=10&page[offset]=10"
+        "next": "https://app.acmeseo.com/api/accounts?page[limit]=10&page[offset]=10"
     }
 }
 ```
@@ -165,7 +165,7 @@ contain information related to the branding contract. E.G. Product portfolio, pr
         + errors (array[System error])
 
 
-## Working with Accounts [/api/accounts]
+## Working with accounts [/api/accounts]
 
 Use the following API calls to work with accounts. You can create, get, update and delete accounts.
 
@@ -359,6 +359,44 @@ You can use the `filter[status]` parameter to query for different Account status
     + Attributes
         + errors (array[Error not found])
 
+## Upgrading or downgrading accounts [/api/accounts/{uuid}/upgrade]
+
+Use this operation to upgrade or downgrade an account to use a different product. The above operation
+for **"Update account"** does not allow to switch product tiers.
+
+### Upgrade / Downgrade account [PATCH /api/accounts/{uuid}/upgrade]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account to upgrade
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
+    + Attributes
+        + data
+            + type: `account` (string, required) - Required json:api item type. Always `account`.
+            + id: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required)
+
+                The ID of the account to upgrade / downgrade. **MUST** match the `uuid` parameter in the URL
+
+            + attributes (Account upgrade parameters)
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + data (Account json)
+
++ Response 400 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error patch upgrade])
+
++ Response 404 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error not found])
+
 
 ## Adding Account add-ons [/api/accounts/{uuid}/addons]
 
@@ -454,6 +492,66 @@ keyword slots to a plan.
 + Response 404 (application/vnd.marketgoo.api+json)
     + Attributes
         + errors (array[Error addon not found])
+
+
+## Managing end user logins to the App [/api/accounts/{uuid}/login]
+
+To properly log a user into the Application you must obtain a Single Sign On URL so that you can provide the
+user with a button or link to click and access the Application. For instance, you can obtain a SSO link
+each time a user logs into your hosting control panel to provide a **[Manage your SEO]** button or menu.
+
+You can get two different SSO links, permanent and expiring:
+
+* Permanent tokens **(Recommended only for personal hosting panels)** will give you a permanent login URL,
+meaning that this link will not expire. You can use this public URL and cache it so that you can login the
+user in the future. There is no personal or critical information in the link, but anyone with access to the
+link would be able to log in to the application. This is why this link method is recommended only for your
+hosting panels, and not for emails.
+
+* Expiring tokens **(Recommended for emails)** will give you a token link with an expiration time in minutes.
+The available range in minutes is 5 to 1440 (24 hours). This link will be valid for login for the entire range,
+starting from the time the call was issued. This is a better option for sending the login URL to the user in
+emails, because anyone with access to the email will only be able to log into the application while the token
+is valid.
+
+
+### Get permanent Single Sign On link [GET /api/accounts/{uuid}/login]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account to get a SSO link
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + meta (Meta permanent SSO)
+        + links (Links SSO login)
+
+### Get expiring Single Sign On link [GET /api/accounts/{uuid}/login?expires={minutes}]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account to get a SSO link
+    + minutes: 60 (number, required) - Number of minutes this token will be valid (between 5 and 1,440).
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Headers
+
+            X-Login-Token: c02cd23f8f44da2a52f8fa104f7820d66eb4475a
+            X-Login-Token-Expires: Wed, 25 Apr 2018 15:35:08 GMT
+
+    + Attributes
+        + meta (Meta expiring SSO)
+        + links (Links SSO login)
 
 
 ## Working with SEO Reports [/api/reports]
@@ -612,25 +710,26 @@ Basically, with **Data API** enabled, you can get the current snapshot of all of
 gathered for the website, from the actual Scores to the list of all the tasks. This gives
 you an incredible opportunity to enrich the user experience into your internal user control panels.
 
-These are some of the most useful request parameters and descriptions you can obtain from our Data API
+These are some of the most useful data fields you can obtain from our Data API:
 
-| Parameters      | Description |
+| Field | Description |
 |-------------|-------------|
-| `created_at`    | Date the account was created. |
-| `product`    | Type of product under MarketGoo portfolio. |
-| `domain`    | Domain name of the account. |
-| `lang`    | Language of the account created. |
-| `thumbnail`    | Obtain a png thumbnail of the site. |
-| `config`    | Set of values such as `cms` the site is running under, `country` as the target, `webmaster_email` in case it was provided. |
-| `scan`    | Set of values about the scanning process. Retrieve `pages_read` that shows how many pages the site has, date of the last scan, detected cms, and detected technology from the site. |
-| `desktop`    | Set of values that show metrics of the website displayed on desktop such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with current and historic measures. |
-| `mobile`    | Set of values that show metrics about the mobile render such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with present and historic measures. Request information about the existence of a responsive or dedicated mobile page with `dedicated` and `responsive` . |
-| `progress`    | Provides information about MarketGoo propietary score separated by marketing area. `global` is the end value when `global_onpage`is the score for onpage SEO and the rest of the score parameters are `visitors`,`sitereview`,`search`,`onpage`,`popularity`,`social` and `mobile`. |
-| `tasks`  | Tasks are the number of recommendations our solution provides to the site owner. We provide data on the total number of tasks, the completed ones, pending, manual tasks and tasks with warnings. There are different parameters to gather specific user behaviour on tasks. For example `configurecomp` let you know if the user has fill any competitor. Other interesting task data includes `wwwspeed`as loading time or `sslexists`to check site SSL configuration. Please refer to the list of tasks in the example or ask for detailed information. |
-| `keywords`  | This group provides information about keyword data including `search_volume` and `rankings` data on Google, Yahoo and BING. The `snippet` one shows meta information on the different search engine queries. |
+| `created_at` | Date the account was created. |
+| `product` | Type of product under MarketGoo portfolio. |
+| `domain` | Domain name of the account. |
+| `lang` | Language of the account created. |
+| `thumbnail` | Obtain a png thumbnail of the site. |
+| `config` | Set of values such as `cms` the site is running under, `country` as the target, `webmaster_email` in case it was provided. |
+| `scan` | Set of values about the scanning process. Retrieve `pages_read` that shows how many pages the site has, date of the last scan, detected cms, and detected technology from the site. |
+| `desktop` | Set of values that show metrics of the website displayed on desktop such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with current and historic measures. |
+| `mobile` | Set of values that show metrics about the mobile render such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with present and historic measures. Request information about the existence of a responsive or dedicated mobile page with `dedicated` and `responsive` . |
+| `progress` | Provides information about MarketGoo propietary score separated by marketing area. `global` is the end value when `global_onpage`is the score for onpage SEO and the rest of the score parameters are `visitors`,`sitereview`,`search`,`onpage`,`popularity`,`social` and `mobile`. |
+| `tasks` | Tasks are the number of recommendations our solution provides to the site owner. We provide data on the total number of tasks, the completed ones, pending, manual tasks and tasks with warnings. There are different parameters to gather specific user behaviour on tasks. For example `configurecomp` let you know if the user has fill any competitor. Other interesting task data includes `wwwspeed`as loading time or `sslexists`to check site SSL configuration. Please refer to the list of tasks in the example or ask for detailed information. |
+| `keywords` | This group provides information about keyword data including `search_volume` and `rankings` data on Google, Yahoo and BING. The `snippet` one shows meta information on the different search engine queries. |
 | `results` | Metrics are `alexa_rank`,`popularity` metrics such as total number of backlinks, total number of domains linking back, detail of most relevant `links`. Social counts under `social` with Facebook Shares plus Likes and number of Linkedin shares and Google Plus. |
-| `competitors`  |  Allows to retrieve comparative metrics of the user competitors on the selected keywords but also retrieving `results` data on these competitors for traffic such as `alexa_rank`,`popularity` metrics are backlinks pointing to home or domain. |
+| `competitors` |  Allows to retrieve comparative metrics of the user competitors on the selected keywords but also retrieving `results` data on these competitors for traffic such as `alexa_rank`,`popularity` metrics are backlinks pointing to home or domain. |
 | `submission` | Data to inform whether the site is listed in the different search engines including URL snippet. |
+| `optimizations` | Data relative to current "Optimize for Search" section optimizations. There should be two sub keys: `pending` and `completed` listing either pending or completed optimization respectively. |
 
 ### Get single account with Data API [GET /api/accounts/{uuid}]
 
@@ -7606,51 +7705,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                         "cert": {
                                             "alternate_names": [
                                                 "sni47221.cloudflaressl.com",
-                                                "*.atai.org",
-                                                "*.backtoorganic.com",
-                                                "*.bodysky.xyz",
-                                                "*.bookeffect.cf",
-                                                "*.downiup8kvb.cf",
-                                                "*.foo-games.com",
-                                                "*.freepdffrench.cf",
-                                                "*.fs-dev.co.uk",
-                                                "*.fuegotapasandwinebar.com",
-                                                "*.gayarml.cf",
-                                                "*.ghesofavietnam.net",
-                                                "*.khv489.com",
-                                                "*.m2broke.tk",
-                                                "*.managecookies.co.uk",
-                                                "*.marketgoo.com",
-                                                "*.mersinmasajadresi.xyz",
-                                                "*.mersinmasajlari.xyz",
-                                                "*.meteon.ru",
-                                                "*.morepdfbooks.cf",
-                                                "*.onehits.net",
-                                                "*.sorkapp.com",
-                                                "*.toppdfbook.cf",
-                                                "*.vxlnmkt.com",
-                                                "atai.org",
-                                                "backtoorganic.com",
-                                                "bodysky.xyz",
-                                                "bookeffect.cf",
-                                                "downiup8kvb.cf",
-                                                "foo-games.com",
-                                                "freepdffrench.cf",
-                                                "fs-dev.co.uk",
-                                                "fuegotapasandwinebar.com",
-                                                "gayarml.cf",
-                                                "ghesofavietnam.net",
-                                                "khv489.com",
-                                                "m2broke.tk",
-                                                "managecookies.co.uk",
                                                 "marketgoo.com",
-                                                "mersinmasajadresi.xyz",
-                                                "mersinmasajlari.xyz",
-                                                "meteon.ru",
-                                                "morepdfbooks.cf",
-                                                "onehits.net",
-                                                "sorkapp.com",
-                                                "toppdfbook.cf",
                                                 "vxlnmkt.com"
                                             ],
                                             "issuer": {
@@ -7671,51 +7726,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                             {
                                                 "alternate_names": [
                                                     "sni47221.cloudflaressl.com",
-                                                    "*.atai.org",
-                                                    "*.backtoorganic.com",
-                                                    "*.bodysky.xyz",
-                                                    "*.bookeffect.cf",
-                                                    "*.downiup8kvb.cf",
-                                                    "*.foo-games.com",
-                                                    "*.freepdffrench.cf",
-                                                    "*.fs-dev.co.uk",
-                                                    "*.fuegotapasandwinebar.com",
-                                                    "*.gayarml.cf",
-                                                    "*.ghesofavietnam.net",
-                                                    "*.khv489.com",
-                                                    "*.m2broke.tk",
-                                                    "*.managecookies.co.uk",
-                                                    "*.marketgoo.com",
-                                                    "*.mersinmasajadresi.xyz",
-                                                    "*.mersinmasajlari.xyz",
-                                                    "*.meteon.ru",
-                                                    "*.morepdfbooks.cf",
-                                                    "*.onehits.net",
-                                                    "*.sorkapp.com",
-                                                    "*.toppdfbook.cf",
-                                                    "*.vxlnmkt.com",
-                                                    "atai.org",
-                                                    "backtoorganic.com",
-                                                    "bodysky.xyz",
-                                                    "bookeffect.cf",
-                                                    "downiup8kvb.cf",
-                                                    "foo-games.com",
-                                                    "freepdffrench.cf",
-                                                    "fs-dev.co.uk",
-                                                    "fuegotapasandwinebar.com",
-                                                    "gayarml.cf",
-                                                    "ghesofavietnam.net",
-                                                    "khv489.com",
-                                                    "m2broke.tk",
-                                                    "managecookies.co.uk",
                                                     "marketgoo.com",
-                                                    "mersinmasajadresi.xyz",
-                                                    "mersinmasajlari.xyz",
-                                                    "meteon.ru",
-                                                    "morepdfbooks.cf",
-                                                    "onehits.net",
-                                                    "sorkapp.com",
-                                                    "toppdfbook.cf",
                                                     "vxlnmkt.com"
                                                 ],
                                                 "issuer": {
@@ -8885,7 +8896,34 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "order": 8900,
                                     "metadata": null
                                 }
-                            ]
+                            ],
+                            "optimizations": {
+                                "pending": [
+                                    {
+                                        "task_id": 766777,
+                                        "status": 0,
+                                        "progress": 50,
+                                        "url": "/",
+                                        "title": "MarketGoo - Easy SEO Tools for Small Businesses",
+                                        "keyword": {
+                                            "id": 50850,
+                                            "keyword": "website report",
+                                            "keyword_pub": "website-report",
+                                            "search_volume": 0,
+                                            "created_at": "2018-04-25T18:32:39Z",
+                                        }
+                                    },
+                                    {
+                                        "task_id": 766778,
+                                        "status": 0,
+                                        "progress": 0,
+                                        "url": "/contact-us",
+                                        "title": "CONTACT US",
+                                        "keyword": null
+                                    }
+                                ],
+                                "completed": []
+                            }
                         }
                     }
                 }
@@ -9654,7 +9692,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
 
 ### Product features (object)
 + is_pack: false (boolean) - Indicates if this product is a "pack" product. (E.G. Agency Pack)
-+ max_plans (number, nullable) - If this product is a "pack", this is the maximum number of sub-plans
++ max_plans: 5 (number, nullable) - If this product is a "pack", this is the maximum number of allowed sub-plans
 + max_keywords: 20 (number, nullable) - Maximum number of keywords allowed
 + max_competitors: 4 (number, nullable) - Maximum number of competitors allowed
 + max_pages: 1000 (number) - Maximum Number of web pages scanned in each scan
@@ -9739,6 +9777,12 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + source (object) - This is the parameter that triggered the error
     + pointer: `/data/attributes/email` (string)
 
+### Error patch upgrade (object)
++ code: 1023 (number) - Numeric error code
++ title: Invalid product token (string) - Error message title
++ detail: The provided product token is invalid. (string) - Error message detail
++ source (object) - This is the parameter that triggered the error
+    + pointer: `/data/attributes/product` (string)
 
 ### Error post addon (object)
 + code: 1060 (number) - Numeric error code
@@ -9777,16 +9821,31 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + total_pages: 1 (number) - Number of pages for the current `limit`
 
 
+### Meta permanent SSO (object)
++ public_login_url: `https://app.acmeseo.com/login?token=c02cd23f8f44da2a52f8fa104f7820d66eb4475a` (string) - HREF to the public permanent SSO login URL
++ token: `c02cd23f8f44da2a52f8fa104f7820d66eb4475a` (string) - Permanent SSO token
+
+
+### Meta expiring SSO (object)
++ public_login_url: `https://app.acmeseo.com/login?token=c02cd23f8f44da2a52f8fa104f7820d66eb4475a` (string) - HREF to the public expiring SSO login URL
++ token: `c02cd23f8f44da2a52f8fa104f7820d66eb4475a` (string) - Expiring SSO token
++ expires_at: `2018-04-25T15:35:08Z` (string) - Date and time of token expiration
+
+
+### Links SSO login (object)
++ login: `https://app.acmeseo.com/login?token=c02cd23f8f44da2a52f8fa104f7820d66eb4475a` (string) - HREF to the public permanent SSO login URL
+
+
 ### Links accounts (object)
-+ first: `/api/accounts?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the first page of the collection
-+ last: `/api/accounts?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the last page of the collection
++ first: `https://app.acmeseo.com/api/accounts?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the first page of the collection
++ last: `https://app.acmeseo.com/api/accounts?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the last page of the collection
 + next (string, nullable) - Link to the next page of the collection
 + prev (string, nullable) - Link to the previous page of the collection
 
 
 ### Links reports (object)
-+ first: `/api/reports?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the first page of the collection
-+ last: `/api/reports?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the last page of the collection
++ first: `https://app.acmeseo.com/api/reports?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the first page of the collection
++ last: `https://app.acmeseo.com/api/reports?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the last page of the collection
 + next (string, nullable) - Link to the next page of the collection
 + prev (string, nullable) - Link to the previous page of the collection
 
@@ -9839,7 +9898,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
     Add this thumbnail filename to the prefix path to create the final URL path to
     the desired thumbnail type and size. For example:
 
-    `https://{domain}/thumbnails/desktop/medium/fb8a42eaaad1eaf41f73e3643140e8f87a15f057.png`
+    `https://app.acmeseo.com/thumbnails/desktop/medium/fb8a42eaaad1eaf41f73e3643140e8f87a15f057.png`
 
 
 ### Account json (object)
@@ -9919,6 +9978,8 @@ Using the same single account endpoint the **Data API** returns a much richer in
 
     The `promo` field is limited to **100 characters** matching `[-_a-zA-Z0-9]{100}`.
 
++ partner_token: `acme-cloud` (string, optional) - The partner token to link this account to
+
 
 ### Account update parameters (object)
 + name: `John Doe` (string, optional) - The new name for the user
@@ -9926,6 +9987,18 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + lang: `en` (string, optional) - The new language for the user
 + country: `us` (string, optional) - The new country for the user
 + promo: `xmas-promo` (string, optional) - The new desired promotional code
++ partner_token: `acme-cloud` (string, optional) - The partner token to link this account to
+
+
+### Account upgrade parameters (object)
++ product: `evolution` (string, required) - The product to upgrade / downgrade to
++ force: `false` (boolean, optional)
+
+    If the downgrade fails because new unmet requirements, use this parameters to force
+    the downgrade. This can happen if the new product plan have more restrictive tiers,
+    for example number of keywords allowed, and the currect plan have more than allowed
+    resources. **Use with caution**: Forcing a downgrade will result in the excess of
+    keywords / competitors / resources be deleted to meet the new requirements.
 
 
 ### Report post parameters (object)
