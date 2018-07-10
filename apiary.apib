@@ -182,6 +182,9 @@ Every account can be in three different states, as stated in the following table
 
 You can use the `filter[status]` parameter to query for different Account status.
 
+## Update vs. Upgrade
+
+Note that "updating" is not the same as "upgrading" an account. The "update" operation as specified in `Update account` below is only meant to change some properties like `name`, `email`, etc.
 
 ### Get multiple accounts [GET /api/accounts?page[limit]={page[limit]}&page[offset]={page[offset]}&filter[status]={filter[status]}&filter[promo]={filter[promo]}}]
 
@@ -364,6 +367,13 @@ You can use the `filter[status]` parameter to query for different Account status
 Use this operation to upgrade or downgrade an account to use a different product. The above operation
 for **"Update account"** does not allow to switch product tiers.
 
+For an upgrade to be successful, the account must fulfill the constrains of the new product. For instance,
+upgrading from a product with 4 allowed keywords to a product with only 2 allowed keywords will fail if
+the user is currently using all of the 4 allowed slots for keywords.
+
+In these cases you can use the `force` attribute to `true` to allow for automatic degradation and the
+system will automatically delete the excess keywords.
+
 ### Upgrade / Downgrade account [PATCH /api/accounts/{uuid}/upgrade]
 
 + Parameters
@@ -381,7 +391,7 @@ for **"Update account"** does not allow to switch product tiers.
             + type: `account` (string, required) - Required json:api item type. Always `account`.
             + id: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required)
 
-                The ID of the account to upgrade / downgrade. **MUST** match the `uuid` parameter in the URL
+                The ID of the account to upgrade. It **MUST** match the `uuid` parameter in the URL
 
             + attributes (Account upgrade parameters)
 
@@ -502,7 +512,7 @@ each time a user logs into your hosting control panel to provide a **[Manage you
 
 You can get two different SSO links, permanent and expiring:
 
-* Permanent tokens **(Recommended only for personal hosting panels)** will give you a permanent login URL,
+* Permanent tokens **(Recommended only for internal hosting panels)** will give you a permanent login URL,
 meaning that this link will not expire. You can use this public URL and cache it so that you can login the
 user in the future. There is no personal or critical information in the link, but anyone with access to the
 link would be able to log in to the application. This is why this link method is recommended only for your
@@ -527,6 +537,10 @@ is valid.
             Accept: application/vnd.marketgoo.api+json
 
 + Response 200 (application/vnd.marketgoo.api+json)
+    + Headers
+
+            X-Login-Bearer: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6ImMwMmNkMjNmOGY0NGRhMmE1MmY4ZmExMDRmNzgyMGQ2NmViNDQ3NWEifQ.ps2TTTQgE_8sZBhd6nARHy5wDHFcM-S9D6zvwHxwHnk
+
     + Attributes
         + meta (Meta permanent SSO)
         + links (Links SSO login)
@@ -546,12 +560,13 @@ is valid.
 + Response 200 (application/vnd.marketgoo.api+json)
     + Headers
 
+            X-Login-Bearer: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6ImMwMmNkMjNmOGY0NGRhMmE1MmY4ZmExMDRmNzgyMGQ2NmViNDQ3NWEiLCJleHBpcmVzX2F0IjoiMjAxOC0wNC0yNVQxNTozNTowOFoifQ.ljoG82kQWmpYVyYwBbpGKJiq0l6_7T8_adD5AmyiUXw
             X-Login-Token: c02cd23f8f44da2a52f8fa104f7820d66eb4475a
             X-Login-Token-Expires: Wed, 25 Apr 2018 15:35:08 GMT
 
     + Attributes
         + meta (Meta expiring SSO)
-        + links (Links SSO login)
+        + links (Links SSO login expiring)
 
 
 ## Working with SEO Reports [/api/reports]
@@ -9642,8 +9657,6 @@ Using the same single account endpoint the **Data API** returns a much richer in
             }
 
 
-
-
 ## Data Structures
 
 ### Branding Info (object)
@@ -9822,18 +9835,23 @@ Using the same single account endpoint the **Data API** returns a much richer in
 
 
 ### Meta permanent SSO (object)
-+ public_login_url: `https://app.acmeseo.com/login?token=c02cd23f8f44da2a52f8fa104f7820d66eb4475a` (string) - HREF to the public permanent SSO login URL
-+ token: `c02cd23f8f44da2a52f8fa104f7820d66eb4475a` (string) - Permanent SSO token
-
++ uuid: `3abbef06969603f910293d20ff2797b24fc0cc02` (string) - The UUID of the requested login account
++ bearer: `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6ImMwMmNkMjNmOGY0NGRhMmE1MmY4ZmExMDRmNzgyMGQ2NmViNDQ3NWEifQ.ps2TTTQgE_8sZBhd6nARHy5wDHFcM-S9D6zvwHxwHnk` (string) - Login Bearer
++ public_login_url: `https://app.acmeseo.com/login?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6ImMwMmNkMjNmOGY0NGRhMmE1MmY4ZmExMDRmNzgyMGQ2NmViNDQ3NWEifQ.ps2TTTQgE_8sZBhd6nARHy5wDHFcM-S9D6zvwHxwHnk` (string) - HREF to the public permanent SSO login URL
 
 ### Meta expiring SSO (object)
-+ public_login_url: `https://app.acmeseo.com/login?token=c02cd23f8f44da2a52f8fa104f7820d66eb4475a` (string) - HREF to the public expiring SSO login URL
++ uuid: `3abbef06969603f910293d20ff2797b24fc0cc02` (string) - The UUID of the requested login account
++ bearer: `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6ImMwMmNkMjNmOGY0NGRhMmE1MmY4ZmExMDRmNzgyMGQ2NmViNDQ3NWEiLCJleHBpcmVzX2F0IjoiMjAxOC0wNC0yNVQxNTozNTowOFoifQ.ljoG82kQWmpYVyYwBbpGKJiq0l6_7T8_adD5AmyiUXw` (string) - Login Bearer
 + token: `c02cd23f8f44da2a52f8fa104f7820d66eb4475a` (string) - Expiring SSO token
 + expires_at: `2018-04-25T15:35:08Z` (string) - Date and time of token expiration
++ public_login_url: `https://app.acmeseo.com/login?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6ImMwMmNkMjNmOGY0NGRhMmE1MmY4ZmExMDRmNzgyMGQ2NmViNDQ3NWEiLCJleHBpcmVzX2F0IjoiMjAxOC0wNC0yNVQxNTozNTowOFoifQ.ljoG82kQWmpYVyYwBbpGKJiq0l6_7T8_adD5AmyiUXw` (string) - HREF to the public expiring SSO login URL
 
 
 ### Links SSO login (object)
-+ login: `https://app.acmeseo.com/login?token=c02cd23f8f44da2a52f8fa104f7820d66eb4475a` (string) - HREF to the public permanent SSO login URL
++ login: `https://app.acmeseo.com/login?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6ImMwMmNkMjNmOGY0NGRhMmE1MmY4ZmExMDRmNzgyMGQ2NmViNDQ3NWEifQ.ps2TTTQgE_8sZBhd6nARHy5wDHFcM-S9D6zvwHxwHnk` (string) - HREF to the public permanent SSO login URL
+
+### Links SSO login expiring (object)
++ login: `https://app.acmeseo.com/login?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6ImMwMmNkMjNmOGY0NGRhMmE1MmY4ZmExMDRmNzgyMGQ2NmViNDQ3NWEiLCJleHBpcmVzX2F0IjoiMjAxOC0wNC0yNVQxNTozNTowOFoifQ.ljoG82kQWmpYVyYwBbpGKJiq0l6_7T8_adD5AmyiUXw` (string) - HREF to the public expiring SSO login URL
 
 
 ### Links accounts (object)
@@ -10045,3 +10063,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + state: `processing` (string)
 + title: `Report still processing.` (string)
 + `percent-complete`: 25 (number)
+
+# Changelog
+
+- [2018-06-15] Added 'bearer' tokens to Permanent and Expiring Login end-point
