@@ -6453,7 +6453,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "section": "search",
                                     "order": 1000,
                                     "metadata": {
-                                        "keywords_count": 3
+                                        "total_count": 3
                                     }
                                 },
                                 {
@@ -6992,27 +6992,35 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "section": "onpage",
                                     "order": 1400,
                                     "metadata": {
-                                        "pages_count": 18,
-                                        "pages": [
+                                        "total_count": 18,
+                                        "pending_items": [
                                             {
+                                                "type": "page",
                                                 "title": "Academy Archives - MarketGoo",
-                                                "url": "/blog/category/academy/"
+                                                "url": "/blog/category/academy/",
+                                                "description": null
                                             },
                                             {
+                                                "type": "page",
                                                 "title": "Case Study Archives - MarketGoo",
-                                                "url": "/blog/category/case-study/"
+                                                "url": "/blog/category/case-study/",
+                                                "description": null
                                             },
                                             {
+                                                "type": "page",
                                                 "title": "Free Website Report Archives - MarketGoo",
-                                                "url": "/blog/category/free-website-report/"
+                                                "url": "/blog/category/free-website-report/",
+                                                "description": null
                                             },
                                             {
+                                                "type": "page",
                                                 "title": "Events Archives - MarketGoo",
-                                                "url": "/blog/category/goo-life/events/"
+                                                "url": "/blog/category/goo-life/events/",
+                                                "description": null
                                             }
                                         ],
-                                        "missing_descriptions_count": 4,
-                                        "missing_descriptions_percent": 0.22916666666667
+                                        "pending_count": 4,
+                                        "pending_percent": 0.22916666666667
                                     }
                                 },
                                 {
@@ -7047,11 +7055,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "warning": false,
                                     "section": "onpage",
                                     "order": 1600,
-                                    "metadata": {
-                                        "images_count": 0,
-                                        "failed_images_count": 0,
-                                        "failed_images_percent": 0
-                                    }
+                                    "metadata": null
                                 },
                                 {
                                     "id": 766784,
@@ -7069,7 +7073,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "section": "site",
                                     "order": 1700,
                                     "metadata": {
-                                        "cert": {
+                                        "cert_info": {
                                             "alternate_names": [
                                                 "sni47221.cloudflaressl.com",
                                                 "marketgoo.com",
@@ -7089,7 +7093,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                             },
                                             "version": 2
                                         },
-                                        "cert_chain": [
+                                        "cert_items": [
                                             {
                                                 "alternate_names": [
                                                     "sni47221.cloudflaressl.com",
@@ -7179,9 +7183,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "section": "site",
                                     "order": 1900,
                                     "metadata": {
-                                        "error_code": 0,
-                                        "error_domain": "marketgoo.com",
-                                        "redir_type": 301,
+                                        "redir_code": 301,
                                         "redir_source": "marketgoo.com",
                                         "redir_target": "www.marketgoo.com"
                                     }
@@ -7201,11 +7203,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "warning": false,
                                     "section": "onpage",
                                     "order": 2000,
-                                    "metadata": {
-                                        "pages_count": 48,
-                                        "count": 0,
-                                        "percent": 0.0
-                                    }
+                                    "metadata": null
                                 },
                                 {
                                     "id": 766788,
@@ -7274,16 +7272,29 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "section": "onpage",
                                     "order": 2400,
                                     "metadata": {
-                                        "duplicate_title_count": 1,
-                                        "duplicate_title": [
+                                        "pending_count": 1,
+                                        "pending_items": [
                                             {
-                                                "count": 4,
+                                                "type": "duplicate",
                                                 "title": "MarketGoo's Blog",
-                                                "urls": [
-                                                    "/blog/",
-                                                    "/blog/page/19/",
-                                                    "/blog/page/2/",
-                                                    "/blog/page/3/"
+                                                "pending_count": 4,
+                                                "pending_items": [
+                                                    {
+                                                        "type": "url",
+                                                        "url": "/blog/"
+                                                    },
+                                                    {
+                                                        "type": "url",
+                                                        "url": "/blog/page/19/"
+                                                    },
+                                                    {
+                                                        "type": "url",
+                                                        "url": "/blog/page/2/"
+                                                    },
+                                                    {
+                                                        "type": "url",
+                                                        "url": "/blog/page/3/"
+                                                    }
                                                 ]
                                             }
                                         ]
@@ -7331,19 +7342,14 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "completed_at": null,
                                     "wrong_from": null,
                                     "sent_at": null,
-                                    "pass": false,
+                                    "pass": true,
                                     "automatic": true,
                                     "status": false,
                                     "manual": false,
                                     "warning": false,
                                     "section": "search",
                                     "order": 2700,
-                                    "metadata": {
-                                        "links_count": 4,
-                                        "missing_links_count": 45,
-                                        "pages_count": 50,
-                                        "links_percent": 0.08
-                                    }
+                                    "metadata": null
                                 },
                                 {
                                     "id": 766803,
@@ -7361,17 +7367,18 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "section": "onpage",
                                     "order": 2800,
                                     "metadata": {
-                                        "changes": [
+                                        "completed_items": [
                                             {
-                                                "change_date": "2017-10-11T00:00:00",
-                                                "domains_out_count": 46,
-                                                "links_out_count": 779,
-                                                "pages_count": 50,
-                                                "pages_real_count": 48
+                                                "type": "change",
+                                                "date_time": "2017-10-11T00:00:00",
+                                                "outbound_domain_count": 46,
+                                                "outbound_link_count": 779,
+                                                "urls_count": 50,
+                                                "pages_count": 48
                                             }
                                         ],
-                                        "recent_changes_count": 0,
-                                        "total_changes_count": 1
+                                        "is_recent": 0,
+                                        "completed_count": 1
                                     }
                                 },
                                 {
@@ -7390,7 +7397,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "section": "onpage",
                                     "order": 2900,
                                     "metadata": {
-                                        "pages_count": 48
+                                        "completed_count": 48
                                     }
                                 },
                                 {
@@ -7443,8 +7450,8 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "section": "mobile",
                                     "order": 3200,
                                     "metadata": {
-                                        "dedicated": false,
-                                        "responsive": true
+                                        "is_dedicated": false,
+                                        "is_responsive": true
                                     }
                                 },
                                 {
@@ -7464,7 +7471,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "order": 3300,
                                     "metadata": {
                                         "speed": 3.195,
-                                        "content_speed": 1.812
+                                        "speed_content": 1.812
                                     }
                                 },
                                 {
@@ -7929,7 +7936,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "order": 6900,
                                     "metadata": {
                                         "domains_count": 46,
-                                        "links_count": 779
+                                        "total_count": 779
                                     }
                                 },
                                 {
@@ -8001,11 +8008,11 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "metadata": {
                                         "anchor_text": "http://www.rococotoypoodles.com/bannerbw.jpg",
                                         "competitor": "www.rococotoypoodles.com",
-                                        "referrer_domain": "www.rusforum.com",
-                                        "referrer_page": "/showthread.php?t=4737",
-                                        "referrer_links_count": 0,
-                                        "referrer_page_title": " Копирайт - Форум: Русские за Границей",
-                                        "anchor_destiny": "/bannerbw.jpg"
+                                        "from_domain": "www.rusforum.com",
+                                        "from_page": "/showthread.php?t=4737",
+                                        "from_page_links": 0,
+                                        "from_page_title": " Копирайт - Форум: Русские за Границей",
+                                        "to_page": "/bannerbw.jpg"
                                     }
                                 },
                                 {
