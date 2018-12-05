@@ -236,6 +236,9 @@ Note that "updating" is not the same as "upgrading" an account. The "update" ope
     + Attributes
         + data (Account json)
 
++ Response 404 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error not found])
 
 ### Create account [POST /api/accounts]
 
@@ -502,6 +505,203 @@ keyword slots to a plan.
 + Response 404 (application/vnd.marketgoo.api+json)
     + Attributes
         + errors (array[Error addon not found])
+
+
+## Managing Keywords [/api/accounts/{uuid}/keywords]
+
+A keyword is a word (or phrase) from which people might find a website when used as a query in search engines like Google.
+With this calls you can retrieve, add or remove the tracked keywords from an account.
+
+The amount of keywords you can track for your account is defined by the product limits. If you try to add more than the allowed you will receive a 409 error telling you've reached your account limits. Remove one of your keywords to makr room for the new one.
+
+
+### Get multiple keywords [GET /api/accounts/{uuid}/keywords]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + data (array[Keyword json])
+
++ Response 403 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[System error])
+
+
+### Get single keyword [GET /api/accounts/{uuid}/keywords/{keyword}]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account to retrieve
+    + keyword: `website report` (string, required) - The keyword to retrieve
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + data (Keyword json)
+
++ Response 404 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error keyword not found])
+
+### Add a new keyword to an existing account [POST /api/accounts/{uuid}/keywords]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account to add a new keyword
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
+    + Attributes
+        + data
+            + type: `keyword` (string, required) - Required json:api item type. Always `keyword`.
+            + attributes (Keyword post parameters)
+
++ Response 201 (application/vnd.marketgoo.api+json)
+    + Headers
+
+            Location: https://app.acmeseo.com/api/accounts/1cbd65c81e6462906c8f4eaf02417d3cae667ffb/keywords/website report
+    + Attributes
+        + data (Keyword json)
+
++ Response 400 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error post keyword])
+        
+
+### Remove a keyword from an existing account [DELETE /api/accounts/{uuid}/keywords/{keyword}]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account to retrieve
+    + keyword: `website report` (string, required) - The keyword
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 204 (application/vnd.marketgoo.api+json)
+
++ Response 404 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error keyword not found])
+
+
+## Managing Competitors [/api/accounts/{uuid}/competitors]
+
+With this calls you can retrieve, add or remove competitors from an account.
+
+Competitors are other website's that use the same keywords as your account's website.
+
+### Get multiple competitors [GET /api/accounts/{uuid}/competitors]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + data (array[Competitor json])
+
++ Response 403 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[System error])
+
+
+### Get single competitor [GET /api/accounts/{uuid}/competitors/{competitor}]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account to retrieve
+    + competitor: `www.sqsp-review.com` (string, required) - The competitor to retrieve
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + data (Competitor json)
+
++ Response 404 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error competitor not found])
+
+### Add a new competitor to an existing account [POST /api/accounts/{uuid}/competitors]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account to add a new competitor
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
+    + Attributes
+        + data
+            + type: `competitor` (string, required) - Required json:api item type. Always `competitor`.
+            + attributes (Competitor post parameters)
+
++ Response 201 (application/vnd.marketgoo.api+json)
+    + Headers
+
+            Location: https://app.acmeseo.com/api/accounts/1cbd65c81e6462906c8f4eaf02417d3cae667ffb/competitors/www.sqsp-review.com
+    + Attributes
+        + data (Competitor json)
+
++ Response 400 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error post competitor])
+        
+
+### Remove a competitor from an existing account [DELETE /api/accounts/{uuid}/competitors/{competitor}]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account to retrieve
+    + competitor: `www.sqsp-review.com` (string, required) - The competitor
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 204 (application/vnd.marketgoo.api+json)
+
++ Response 404 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error competitor not found])
+
 
 
 ## Managing end user logins to the App [/api/accounts/{uuid}/login]
@@ -9163,6 +9363,19 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + source (object) - This is the parameter that triggered the error
     + pointer: `/data/attributes/token` (string)
 
+### Error post keyword (object)
++ code: 1080 (number) - Numeric error code
++ title: `Invalid Keyword` (string) - Error message title
++ detail: `This keyword already exists for this account.` (string) - Error message detail
++ source (object) - This is the parameter that triggered the error
+    + pointer: `/data/attributes/keyword` (string)
+
+### Error post competitor (object)
++ code: 1090 (number) - Numeric error code
++ title: `Invalid Competitor` (string) - Error message title
++ detail: `This competitor already exists for this account.` (string) - Error message detail
++ source (object) - This is the parameter that triggered the error
+    + pointer: `/data/attributes/competitor` (string)
 
 ### Error not found (object)
 + status: 404 (number) - HTTP status
@@ -9186,6 +9399,16 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + status: 409 (number) - HTTP status
 + title: `Not suspended` (string) - Error message title
 + detail: `The requested account is not suspended` (string) - Error message detail
+
+### Error keyword not found (object)
++ status: 404 (number) - HTTP status
++ title: `Not Found` (string) - Error message title
++ detail: `The requested keyword was not found` (string) - Error message detail
+
+### Error competitor not found (object)
++ status: 404 (number) - HTTP status
++ title: `Not Found` (string) - Error message title
++ detail: `The requested competitor was not found` (string) - Error message detail
 
 
 ### Meta (object)
@@ -9422,6 +9645,134 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + state: `processing` (string)
 + title: `Report still processing.` (string)
 + `percent-complete`: 25 (number)
+
+### Keyword json (object)
++ id: `website report` (string)
+
+    The unique ID for the Keyword.
+
++ type: keyword (string)
+
+    Defines the type of the object returned in `attributes`.
+
++ attributes (Keyword base)
+
+### Keyword base (object)
++ id: `19766` (string) - The unique resource identifier for this Account
++ keyword: `website report` (string) - Full name of the Keyword, including punctuation
++ keyword_pub: `website-report` (string) - Transliterated keyword using the ICU library
++ search_volume: 170 (number) - The aproximate search volume of this keyword the moment it was added
++ created_at: `2016-11-22T16:31:02Z` (string) - Keyword creation date / time
++ rankings (Ranking Engines)
+
+### Ranking Engines (object)
++ google (Ranking)
++ bing (Ranking)
++ yahoo (Ranking)
+
+### Ranking (object)
++ volume (Ranking Data)
++ position (Ranking Data)
++ page (Ranking Data)
++ snippet (Snippet)
+
+### Ranking Data (object)
++ value: 35500000 (number)
++ history (Ranking History)
++ diff: 902500000 (number)
++ total_days: 336 (number)
+
+### Snippet (object)
++ title: `Free Website Report - MarketGoo` (string)
++ description: `In just a few seconds, MarketGoo scans your website and evaluates any technical errors as well as your website marketing and social media presence. You then ...` (string)
++ url: `https://www.marketgoo.com/free-website-report/` (string)
++ url_visible: `https://www.marketgoo.com/free-website-report/` (string)
++ last_seen_at: `2017-10-21T17:38:41Z` (string) - Snippet creation date / time
+
+### Ranking History (object)
++ daily (Daily series)
++ weekly (Weekly series) 
+
+### Daily series (array)
++ 987000000 (number)
++ 987000000 (number)
++ 987000000 (number)
++ 33200000 (number)
++ 33200000 (number)
++ 33200000 (number)
++ 816000000 (number)
++ 816000000 (number)
++ 816000000 (number)
++ 30400000 (number)
++ 30400000 (number)
++ 30400000 (number)
++ 35500000 (number)
++ 35500000 (number)
++ 35500000 (number)
+
+### Weekly series (array)
++ 821000000 (number)
++ 23400000 (number)
++ 829000000 (number)
++ 819000000 (number)
++ 28400000 (number)
++ 928000000 (number)
++ 927000000 (number)
++ 788000000 (number)
++ 806000000 (number)
++ 30400000 (number)
++ 30400000 (number)
++ 30400000 (number)
+
+### Keyword post parameters (object)
++ keyword_id: `website report` (string, required) - The keyword to add
+
+### Competitor json (object)
++ id: `www.sqsp-review.com` (string)
+
+    The unique ID for the Competitor.
+
++ type: competitor (string)
+
+    Defines the type of the object returned in `attributes`.
+
++ attributes (Competitor base)
+
+### Competitor base (object)
++ domain: `www.sqsp-review.com` (string)) - Competitor's domain
++ created_at: `2016-11-22T16:31:02Z` (string) - Competitor creation date / time
++ checked_at: `2016-11-22T16:31:02Z` (string) - Competitor's last scan date / time
++ thumbnail: `6f471475efb2cd6efacc8c622369a57cd5384904.png` (string)) - Competitor's site thumbnail
++ keywords (array[Keyword json]))
++ results (Competitor results)
+
+### Competitor results (object)
++ traffic (Traffic)
++ popularity (Popularity)
++ onpage (Onpage)
+
+### Traffic (object)
++ alexa_rank (Ranking Data)
+
+### Popularity domain (object)
++ name: `www.rusforum.com` (string)
++ links_found: 2 (number)
+
+### Popularity (object)
++ num_links_to_home (Ranking Data)
++ num_links_to_canonical (Ranking Data)
++ num_links (Ranking Data)
++ num_domains (Ranking Data)
++ num_domains_to_home (Ranking Data)
++ domains (array[Popularity domain])
+
+### Onpage (object)
++ low_content (Ranking Data)
++ unchanged_days: 0 (number)
+
+### Competitor post parameters (object)
++ competitor_id: `www.sqsp-review.com` (string, required) - The competitor to add
+
 
 # Changelog
 
