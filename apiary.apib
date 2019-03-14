@@ -29,16 +29,93 @@ All calls to the **MarketGoo** API must be SSL secured. Also, all API requests m
 be authenticated by using the `X-Auth-Token` header. You must use the provided
 **API Key** in this header.
 
+> ### Important note
+>
+> This **API Key** provides you with administrative privileges to freely create, delete
+> and manage accounts without restriction so it is very important for your provision
+> software to **keep this API Key as secured as possible**.
+
 > We will use `1234567890abcdef` as a dummy API Key through this documentation.
 > Please be sure to use our provided **API Key** in production.
 
 A sample request to the `/api/accounts` endpoint might look like:
 
-```curl
+```
 GET /api/accounts HTTP/1.1
 Host: app.acmeseo.com
 X-Auth-Token: 1234567890abcdef
 Accept: application/vnd.marketgoo.api+json
+```
+
+
+# Pre-signed public Authentication
+
+There might be some times you will need to pre-authorize external libraries to access a
+certain account to read Data API information (see "Data API features" below). Some examples
+might include a WordPress Plugin, a cPanel host or some script you want to give Data API
+access **without exposing the private API Key**.
+
+The call to "Get single account" at `GET /api/account/<UUID>` (see below) accepts an
+`Authorization` header like in the following example:
+
+```
+GET /api/accounts/<UUID> HTTP/1.1
+Host: app.acmeseo.com
+Authorization: Bearer <Pre-signed JWT Token>
+Accept: application/vnd.marketgoo.api+json
+```
+
+The `<Pre-signed JWT Token>` bearer is similar in concept to an **OAuth2 permanent token**.
+Your provision software can **sign this token using the API Key** and pass it along
+the `<UUID>` to the external software. Then this external software is free to store the
+token and use it in the `Authentication:` header to access the account information.
+
+JWT stands for "JSON Web Tokens", and it's a RFC 7519 standard for representing claims.
+Please see the [RFC-7519 standard](https://tools.ietf.org/html/rfc7519) and the
+[JWT website](https://jwt.io) for more information.
+
+To construct the JWT token needed for this authentication, please use the **HMACSHA256**
+algorithm to sign the JWT body using your **API Key** as secret. The body of the JWT needs
+to include the `uuid` field as shown below:
+
+```
+{
+    "uuid": <UUID>
+}
+```
+
+There are several libraries to handle JWT tokens, please see the [JWT website](https://jwt.io)
+for more information. Here you can see an example using PHP with the Firebase JWT library:
+
+```
+<?php
+
+// Use your preferred JWT library. Firebase used as example.
+use Firebase\JWT\JWT;
+
+// Pre-sign the JWT using your API Key with "HS256" algorithm
+$bearer = JWT::encode([
+    "uuid" => "1cbd65c81e6462906c8f4eaf02417d3cae667ffb"
+], "1234567890abcdef", "HS256");
+
+echo $bearer.PHP_EOL;
+?>
+
+---
+
+Expected output:
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiMWNiZDY1YzgxZTY0NjI5MDZjOGY0ZWFmMDI0MTdkM2NhZTY2N2ZmYiJ9.AslfPa8csfWO65asCfr79ErVgrrCPzeuG7LC1GH__vE
+
+```
+
+Using the Bearer from the above example, you can make a request to `GET /api/accounts/<UUID>`
+as follows:
+
+```
+GET /api/accounts/<UUID> HTTP/1.1
+Host: app.acmeseo.com
+Accept: application/vnd.marketgoo.api+json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiMWNiZDY1YzgxZTY0NjI5MDZjOGY0ZWFmMDI0MTdkM2NhZTY2N2ZmYiJ9.AslfPa8csfWO65asCfr79ErVgrrCPzeuG7LC1GH__vE
 ```
 
 
