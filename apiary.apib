@@ -1007,6 +1007,7 @@ These are some of the most useful data fields you can obtain from our Data API:
 |-------------|-------------|
 | `created_at` | Date the account was created. |
 | `product` | Type of product under marketgoo portfolio. |
+| `product_details` | Some useful info about the product. Includes the `name` of the product and a set of `features` to identify limits and privileges on this specific product. |
 | `domain` | Domain name of the account. |
 | `lang` | Language of the account created. |
 | `thumbnail` | Obtain a png thumbnail of the site. |
@@ -9781,7 +9782,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + 30400000 (number)
 
 ### Keyword post parameters (object)
-+ keyword_id: `website report` (string, required) - The keyword to add
++ name: `website report` (string, required) - The keyword to add
 
 ### Competitor json (object)
 + id: `www.sqsp-review.com` (string)
@@ -9827,7 +9828,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + unchanged_days: 0 (number)
 
 ### Competitor post parameters (object)
-+ competitor_id: `www.sqsp-review.com` (string, required) - The competitor to add
++ domain: `www.sqsp-review.com` (string, required) - The competitor to add
 
 
 # Changelog
