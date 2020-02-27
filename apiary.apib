@@ -1,11 +1,11 @@
 FORMAT: 1A9
 
-# MarketGoo Provisioning API
+# marketgoo Provisioning API
 
-The **Marketgoo** API is based on REST principles and follows the recommendations
+The **marketgoo** API is based on REST principles and follows the recommendations
 set forth in the [**json:api** specification](http://jsonapi.org).
 
-The API end-point uses the domain configured as part of your **MarketGoo** integration
+The API end-point uses the domain configured as part of your **marketgoo** integration
 with the `/api` prefix at the beginning of the path. We will use the domain
 `app.acmeseo.com/api` as an example end-point domain through this documentation, but
 remember to use your assigned production domain.
@@ -25,7 +25,7 @@ find it difficult to override the standard **JSON** mime type of your library.
 
 # Authentication
 
-All calls to the **MarketGoo** API must be SSL secured. Also, all API requests must
+All calls to the **marketgoo** API must be SSL secured. Also, all API requests must
 be authenticated by using the `X-Auth-Token` header. You must use the provided
 **API Key** in this header.
 
@@ -170,7 +170,7 @@ Example `meta` and `links` object from a paginated response:
 # Product and product add-on tokens
 
 The list of available products and add-ons will vary upon your partnership contract with
-MarketGoo. We use the example product token `evolution` and an example add-on token
+marketgoo. We use the example product token `evolution` and an example add-on token
 `keyword10` only for documentation purposes. You can view your actual list of available
 product and add-on tokens by using the "**General information**" operations "**Get available
 products**" and "**Get available product add-ons**" in the reference below.
@@ -992,7 +992,7 @@ returns a `201 Created` response with the SEO Report as payload.
 
 ## Data API features [/api/accounts/{uuid}]
 
-Data API is an optional service included in a higher tier from the standard MarketGoo API. The data scheme of the Data API
+Data API is an optional service included in a higher tier from the standard marketgoo API. The data scheme of the Data API
 provides deeper and richer information on every account.
 
 For further information ask our **Business Development** team at [partners@marketgoo.com](mailto:partners@marketgoo.com)
@@ -1006,7 +1006,7 @@ These are some of the most useful data fields you can obtain from our Data API:
 | Field | Description |
 |-------------|-------------|
 | `created_at` | Date the account was created. |
-| `product` | Type of product under MarketGoo portfolio. |
+| `product` | Type of product under marketgoo portfolio. |
 | `domain` | Domain name of the account. |
 | `lang` | Language of the account created. |
 | `thumbnail` | Obtain a png thumbnail of the site. |
@@ -1014,7 +1014,7 @@ These are some of the most useful data fields you can obtain from our Data API:
 | `scan` | Set of values about the scanning process. Retrieve `pages_read` that shows how many pages the site has, date of the last scan, detected cms, and detected technology from the site. |
 | `desktop` | Set of values that show metrics of the website displayed on desktop such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with current and historic measures. |
 | `mobile` | Set of values that show metrics about the mobile render such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with present and historic measures. Request information about the existence of a responsive or dedicated mobile page with `dedicated` and `responsive` . |
-| `progress` | Provides information about MarketGoo propietary score separated by marketing area. `global` is the end value when `global_onpage` is the score for onpage SEO and the rest of the score parameters are `visitors`, `sitereview`, `search`, `onpage`, `popularity`, and `mobile`. |
+| `progress` | Provides information about marketgoo propietary score separated by marketing area. `global` is the end value when `global_onpage` is the score for onpage SEO and the rest of the score parameters are `visitors`, `sitereview`, `search`, `onpage`, `popularity`, and `mobile`. |
 | `tasks` | Tasks are the number of recommendations our solution provides to the site owner. We provide data on the total number of tasks, the completed ones, pending, manual tasks and tasks with warnings. There are different parameters to gather specific user behaviour on tasks. For example `configurecomp` let you know if the user has fill any competitor. Other interesting task data includes `wwwspeed`as loading time or `sslexists`to check site SSL configuration. Please refer to the list of tasks in the example or ask for detailed information. |
 | `keywords` | This group provides information about keyword data including `search_volume` and `rankings` data on Google, Yahoo and BING. The `snippet` one shows meta information on the different search engine queries. |
 | `results` | Metrics are `alexa_rank`, `popularity` metrics such as total number of backlinks, total number of domains linking back, detail of most relevant `links`. |
@@ -1054,7 +1054,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                         "is_configured": true,
                         "product": "evolution",
                         "domain": "www.marketgoo.com",
-                        "name": "MarketGoo Team",
+                        "name": "marketgoo Team",
                         "email": "info@marketgoo.com",
                         "lang": "en",
                         "site": {
@@ -1063,7 +1063,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                             "checked_at": "2017-10-23T14:25:30Z",
                             "thumbnail": "fb8a42eaaad1eaf41f73e3643140e8f87a15f057.png",
                             "config": {
-                                "company_name": "MarketGoo",
+                                "company_name": "marketgoo",
                                 "is_local": false,
                                 "city": "",
                                 "country": "us",
@@ -2519,8 +2519,8 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                                 "total_days": 336
                                             },
                                             "snippet": {
-                                                "title": "Free Website Report - MarketGoo",
-                                                "description": "In just a few seconds, MarketGoo scans your website and evaluates any technical errors as well as your website marketing and social media presence. You then ...",
+                                                "title": "Free Website Report - marketgoo",
+                                                "description": "In just a few seconds, marketgoo scans your website and evaluates any technical errors as well as your website marketing and social media presence. You then ...",
                                                 "url": "https://www.marketgoo.com/free-website-report/",
                                                 "url_visible": "https://www.marketgoo.com/free-website-report/",
                                                 "last_seen_at": "2017-10-21T17:38:41Z"
@@ -2885,8 +2885,8 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                                 "total_days": 336
                                             },
                                             "snippet": {
-                                                "title": "Improve the SEO for your Squarespace Site! - MarketGoo",
-                                                "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized.",
+                                                "title": "Improve the SEO for your Squarespace Site! - marketgoo",
+                                                "description": "If you need to improve the SEO for your Squarespace site, marketgoo is the easiest way to grow your traffic and search engine rankings.How? our personalized.",
                                                 "url": "https://www.marketgoo.com/squarespace-seo-best-practices/",
                                                 "url_visible": "https://www.marketgoo.com/squarespace-seo-best-practices/",
                                                 "last_seen_at": "2017-10-21T17:39:13Z"
@@ -3263,7 +3263,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                                 "total_days": 336
                                             },
                                             "snippet": {
-                                                "title": "MarketGoo - Easy SEO Tools for Small Businesses",
+                                                "title": "marketgoo - Easy SEO Tools for Small Businesses",
                                                 "description": "Improve your SEO, increase your website traffic and rankings with our easy SEO tools ideal for Small Businesses. 10 day free trial!",
                                                 "url": "http://www.marketgoo.com/",
                                                 "url_visible": "http://www.marketgoo.com/",
@@ -6588,7 +6588,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                             "total_days": 336
                                         },
                                         "snippet": {
-                                            "title": "MarketGoo - Easy SEO Tools for Small Businesses",
+                                            "title": "marketgoo - Easy SEO Tools for Small Businesses",
                                             "description": "Improve your SEO, increase your website traffic and rankings with our easy SEO tools ideal for Small Businesses. 10 day free trial!",
                                             "url": "http://www.marketgoo.com/",
                                             "url_visible": "http://www.marketgoo.com/",
@@ -6635,7 +6635,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                             "total_days": 336
                                         },
                                         "snippet": {
-                                            "title": "MarketGoo - Easy SEO Tools for Small Businesses",
+                                            "title": "marketgoo - Easy SEO Tools for Small Businesses",
                                             "description": "null",
                                             "url": "http://www.marketgoo.com/",
                                             "url_visible": "http://www.marketgoo.com/",
@@ -6682,7 +6682,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                             "total_days": 336
                                         },
                                         "snippet": {
-                                            "title": "MarketGoo - Easy SEO Tools for Small Businesses",
+                                            "title": "marketgoo - Easy SEO Tools for Small Businesses",
                                             "description": "null",
                                             "url": "http://www.marketgoo.com/",
                                             "url_visible": "http://www.marketgoo.com/",
@@ -6750,7 +6750,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "page": {
                                         "id": "42099b4af021e53fd8fd4e056c2568d7c2e3ffa8",
                                         "url": "/",
-                                        "title": "MarketGoo - Easy SEO Tools for Small Businesses",
+                                        "title": "marketgoo - Easy SEO Tools for Small Businesses",
                                         "description": "Improve your SEO, increase your website traffic and rankings with our easy SEO tools ideal for Small Businesses. 10 day free trial!"
                                     },
                                     "keyword": null,
@@ -6912,8 +6912,8 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "page": {
                                         "id": "af6ef38071b90bb104b9cbc760e3aefaad62b218",
                                         "url": "/privacy-policy/",
-                                        "title": "Privacy Policy - MarketGoo",
-                                        "description": "Read MarketGoo's Privacy Policy."
+                                        "title": "Privacy Policy - marketgoo",
+                                        "description": "Read marketgoo's Privacy Policy."
                                     },
                                     "keyword": null,
                                     "metadata": null,
@@ -7272,25 +7272,25 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                         "pending_items": [
                                             {
                                                 "type": "page",
-                                                "title": "Academy Archives - MarketGoo",
+                                                "title": "Academy Archives - marketgoo",
                                                 "url": "/blog/category/academy/",
                                                 "description": null
                                             },
                                             {
                                                 "type": "page",
-                                                "title": "Case Study Archives - MarketGoo",
+                                                "title": "Case Study Archives - marketgoo",
                                                 "url": "/blog/category/case-study/",
                                                 "description": null
                                             },
                                             {
                                                 "type": "page",
-                                                "title": "Free Website Report Archives - MarketGoo",
+                                                "title": "Free Website Report Archives - marketgoo",
                                                 "url": "/blog/category/free-website-report/",
                                                 "description": null
                                             },
                                             {
                                                 "type": "page",
-                                                "title": "Events Archives - MarketGoo",
+                                                "title": "Events Archives - marketgoo",
                                                 "url": "/blog/category/goo-life/events/",
                                                 "description": null
                                             }
@@ -7552,7 +7552,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                         "pending_items": [
                                             {
                                                 "type": "duplicate",
-                                                "title": "MarketGoo's Blog",
+                                                "title": "marketgoo's Blog",
                                                 "pending_count": 4,
                                                 "pending_items": [
                                                     {
@@ -8534,7 +8534,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                         "status": 0,
                                         "progress": 50,
                                         "url": "/",
-                                        "title": "MarketGoo - Easy SEO Tools for Small Businesses",
+                                        "title": "marketgoo - Easy SEO Tools for Small Businesses",
                                         "keyword": {
                                             "id": 50850,
                                             "keyword": "website report",
@@ -8591,7 +8591,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                         "country": "us",
                         "status": 100,
                         "pages": 50,
-                        "home_title": "MarketGoo - Easy SEO Tools for Small Businesses",
+                        "home_title": "marketgoo - Easy SEO Tools for Small Businesses",
                         "home_description": "Improve your SEO, increase your website traffic and rankings with our easy SEO tools ideal for Small Businesses. 10 day free trial!",
                         "thumbnail": "fb8a42eaaad1eaf41f73e3643140e8f87a15f057.png",
                         "scores": {
@@ -8685,8 +8685,8 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                 "metadata": {
                                     "pages": [
                                         {
-                                            "description": "Give your customers the marketing expertise they crave! Partner with MarketGoo. White-label available.",
-                                            "title": "Partners - MarketGoo",
+                                            "description": "Give your customers the marketing expertise they crave! Partner with marketgoo. White-label available.",
+                                            "title": "Partners - marketgoo",
                                             "url": "www.marketgoo.com/partners/"
                                         }
                                     ],
@@ -8702,7 +8702,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "pages": [
                                         {
                                             "description": "Welcome Weebly user! If you’re here, you’re aware of the importance of SEO (search engine optimisation) for your Weebly site. Perhaps you are not clear on what exactly it means or how much you should be working on it, but you know you need it.  So how badly do you need it? Well, 89% of […]",
-                                            "title": "How to easily improve your Weebly website SEO? - MarketGoo",
+                                            "title": "How to easily improve your Weebly website SEO? - marketgoo",
                                             "url": "www.marketgoo.com/how-to-easily-improve-your-weebly-website-seo/"
                                         },
                                         {
@@ -8716,18 +8716,18 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                             "url": "www.marketgoo.com/easy-shopify-seo"
                                         },
                                         {
-                                            "description": "How do you better serve your clients & boost your bottom line? With MarketGoo Agency Pack!",
-                                            "title": "Agencies - MarketGoo",
+                                            "description": "How do you better serve your clients & boost your bottom line? With marketgoo Agency Pack!",
+                                            "title": "Agencies - marketgoo",
                                             "url": "www.marketgoo.com/agencies/"
                                         },
                                         {
-                                            "description": "Meet Goo & the team behind MarketGoo to see why we're right for you!",
-                                            "title": "About - MarketGoo",
+                                            "description": "Meet Goo & the team behind marketgoo to see why we're right for you!",
+                                            "title": "About - marketgoo",
                                             "url": "www.marketgoo.com/about-us/"
                                         },
                                         {
-                                            "description": "Haz crecer tu negocio escalando tus servicios de SEO y Marketing Web con MarketGoo.",
-                                            "title": "Agencias - MarketGoo",
+                                            "description": "Haz crecer tu negocio escalando tus servicios de SEO y Marketing Web con marketgoo.",
+                                            "title": "Agencias - marketgoo",
                                             "url": "www.marketgoo.com/es/agencias/"
                                         }
                                     ],
@@ -8740,58 +8740,58 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                 "metadata": {
                                     "pages": [
                                         {
-                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "description": "If you need to improve the SEO for your Squarespace site, marketgoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
                                             "title": "Improve the SEO for your Squarespace Site!",
                                             "url": "www.marketgoo.com/squarespace-seo-best-practices"
                                         },
                                         {
-                                            "description": "Google recently posted a very enthusiastic post about HTTPS. If you’re a MarketGoo user, you know we check whether your site has an SSL certificate because it plays a part in your search engine ranking and is especially important if you sell any product or service through your website. Early this year we already recognised […]",
-                                            "title": "HTTPS and SSL Explained - MarketGoo",
+                                            "description": "Google recently posted a very enthusiastic post about HTTPS. If you’re a marketgoo user, you know we check whether your site has an SSL certificate because it plays a part in your search engine ranking and is especially important if you sell any product or service through your website. Early this year we already recognised […]",
+                                            "title": "HTTPS and SSL Explained - marketgoo",
                                             "url": "www.marketgoo.com/blog/2016/11/10/https-ssl-weebly-wix-wordpress/"
                                         },
                                         {
                                             "description": "Thanks to Katy Carlisle, Squarespace expert at The Wheel Exists, for writing this super informative article for our readers! If you haven’t come across it before, Squarespace is a tool that makes it really easy to create and maintain your own website. As well as being a fantastic platform for blogging, it can also be used […]",
-                                            "title": "How to Blog Using Squarespace - MarketGoo",
+                                            "title": "How to Blog Using Squarespace - marketgoo",
                                             "url": "www.marketgoo.com/blog/2017/06/13/how-to-blog-using-squarespace/"
                                         },
                                         {
                                             "description": "Política de cookies ¿Qué es una cookie? Las cookies son unos pequeños archivos de texto que se instalan en tu ordenador, móvil o tableta y que contienen información sobre lo que has hecho en esta web. Esta información se utiliza para cosas tan útiles como que no tengas que meter tu usuario y contraseña cada […]",
-                                            "title": "Política de privacidad - MarketGoo",
+                                            "title": "Política de privacidad - marketgoo",
                                             "url": "www.marketgoo.com/es/politica-de-privacidad-2/"
                                         },
                                         {
                                             "description": "Practices That Are Controversial, But Don’t Directly Affect Google Rankings Thanks to Ashley Lipman for this week’s guest post! Many Variables When it comes to Google rankings in terms of website authority, keep one thing in mind: the way by which things are ranked is in constant flux. It is in constant flux because technology […]",
-                                            "title": "Controversial Practises that Don’t Directly Affect SEO - MarketGoo",
+                                            "title": "Controversial Practises that Don’t Directly Affect SEO - marketgoo",
                                             "url": "www.marketgoo.com/blog/2018/02/06/google-doesnt-care-about/"
                                         },
                                         {
-                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "description": "If you need to improve the SEO for your Squarespace site, marketgoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
                                             "title": "Improve the SEO for your Squarespace Site!",
                                             "url": "www.marketgoo.com/squarespace-seo-best-practices/"
                                         },
                                         {
                                             "description": "What is a Contact Form? If you have ever wanted to get in touch with a business that has a website, chances are you’ve ended up on their “Contact Us” page which probably had their numbers, maybe some social profiles, and a contact form.  While this seems simple enough, there are many businesses that neglect […]",
-                                            "title": "Web Marketing: Contact Forms - MarketGoo",
+                                            "title": "Web Marketing: Contact Forms - marketgoo",
                                             "url": "www.marketgoo.com/blog/2016/05/25/contact-forms-wix-weebly-squarespace"
                                         },
                                         {
                                             "description": "It’s exciting having well known personalities on our platform, and we’re delighted to present Mary Lado Stoutz, who has a website dedicated to retail with a focus on workout clothing. Let’s see what she had to say about using her website to promote her business: Person behind the Business:  Mary Lado Stoutz Location: New orleans, […]",
-                                            "title": "Small Business Spotlight: Mary Lado Stoutz of Mary Lado 180 - MarketGoo",
+                                            "title": "Small Business Spotlight: Mary Lado Stoutz of Mary Lado 180 - marketgoo",
                                             "url": "www.marketgoo.com/blog/2018/01/26/smb-seo-mary-lado-180/"
                                         },
                                         {
                                             "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
-                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "title": "What is the deal with the robots.txt file? - marketgoo",
                                             "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress/"
                                         },
                                         {
                                             "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
-                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "title": "What is the deal with the robots.txt file? - marketgoo",
                                             "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress"
                                         },
                                         {
                                             "description": "Welcome Weebly user! If you’re here, you’re aware of the importance of SEO (search engine optimisation) for your Weebly site. Perhaps you are not clear on what exactly it means or how much you should be working on it, but you know you need it.  So how badly do you need it? Well, 89% of […]",
-                                            "title": "How to easily improve your Weebly website SEO? - MarketGoo",
+                                            "title": "How to easily improve your Weebly website SEO? - marketgoo",
                                             "url": "www.marketgoo.com/how-to-easily-improve-your-weebly-website-seo/"
                                         }
                                     ],
@@ -8804,12 +8804,12 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "pages": [
                                         {
                                             "description": "Practices That Are Controversial, But Don’t Directly Affect Google Rankings Thanks to Ashley Lipman for this week’s guest post! Many Variables When it comes to Google rankings in terms of website authority, keep one thing in mind: the way by which things are ranked is in constant flux. It is in constant flux because technology […]",
-                                            "title": "Controversial Practises that Don’t Directly Affect SEO - MarketGoo",
+                                            "title": "Controversial Practises that Don’t Directly Affect SEO - marketgoo",
                                             "url": "www.marketgoo.com/blog/2018/02/06/google-doesnt-care-about/"
                                         },
                                         {
                                             "description": "It’s exciting having well known personalities on our platform, and we’re delighted to present Mary Lado Stoutz, who has a website dedicated to retail with a focus on workout clothing. Let’s see what she had to say about using her website to promote her business: Person behind the Business:  Mary Lado Stoutz Location: New orleans, […]",
-                                            "title": "Small Business Spotlight: Mary Lado Stoutz of Mary Lado 180 - MarketGoo",
+                                            "title": "Small Business Spotlight: Mary Lado Stoutz of Mary Lado 180 - marketgoo",
                                             "url": "www.marketgoo.com/blog/2018/01/26/smb-seo-mary-lado-180/"
                                         }
                                     ],
@@ -8828,7 +8828,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "pages": [
                                         {
                                             "description": "",
-                                            "title": "Academy Archives - MarketGoo",
+                                            "title": "Academy Archives - marketgoo",
                                             "url": "www.marketgoo.com/blog/category/academy/"
                                         },
                                         {
@@ -8838,42 +8838,42 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=sslanding&utm_medium=intro&utm_campaign=cms"
                                         },
                                         {
                                             "description": "",
-                                            "title": "Guest Posts for MarketGoo Archives - MarketGoo",
+                                            "title": "Guest Posts for marketgoo Archives - marketgoo",
                                             "url": "www.marketgoo.com/blog/category/guest-posts-for-marketgoo/"
                                         },
                                         {
                                             "description": "",
-                                            "title": "SEO & Website Marketing Tips Archives - MarketGoo",
+                                            "title": "SEO & Website Marketing Tips Archives - marketgoo",
                                             "url": "www.marketgoo.com/blog/category/seo-website-marketing-tips/"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=Landing&utm_medium=WP&utm_campaign=CTA2"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=shopify"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=wix"
                                         },
                                         {
                                             "description": "",
-                                            "title": "Small Business Spotlight Archives - MarketGoo",
+                                            "title": "Small Business Spotlight Archives - marketgoo",
                                             "url": "www.marketgoo.com/blog/category/small-business-spotlight/"
                                         },
                                         {
                                             "description": "",
-                                            "title": "SEO Cheatsheets Archives - MarketGoo",
+                                            "title": "SEO Cheatsheets Archives - marketgoo",
                                             "url": "www.marketgoo.com/blog/category/seo-website-marketing-tips/seo-cheatsheets/"
                                         }
                                     ],
@@ -8886,22 +8886,22 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "pages": [
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=Landing&utm_medium=WP&utm_campaign=CTA2"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=shopify"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=sslanding&utm_medium=intro&utm_campaign=cms"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=wix"
                                         }
                                     ],
@@ -8942,58 +8942,58 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                 "metadata": {
                                     "pages": [
                                         {
-                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "description": "If you need to improve the SEO for your Squarespace site, marketgoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
                                             "title": "Improve the SEO for your Squarespace Site!",
                                             "url": "www.marketgoo.com/squarespace-seo-best-practices/"
                                         },
                                         {
-                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
-                                            "title": "MarketGoo's Blog",
+                                            "description": "Welcome to marketgoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "marketgoo's Blog",
                                             "url": "www.marketgoo.com/blog/"
                                         },
                                         {
                                             "description": "Marketing Web y SEO para PyMEs y Agencias, sin distracciones. Evalúa tu sitio y comienza a optimizar. Prueba gratis 10 días.",
-                                            "title": "MarketGoo - SEO y Marketing Web",
+                                            "title": "marketgoo - SEO y Marketing Web",
                                             "url": "www.marketgoo.com/es"
                                         },
                                         {
-                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
-                                            "title": "MarketGoo's Blog",
+                                            "description": "Welcome to marketgoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "marketgoo's Blog",
                                             "url": "www.marketgoo.com/blog/page/2/"
                                         },
                                         {
-                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
-                                            "title": "MarketGoo's Blog",
+                                            "description": "Welcome to marketgoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "marketgoo's Blog",
                                             "url": "www.marketgoo.com/blog/page/3/"
                                         },
                                         {
-                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
-                                            "title": "MarketGoo's Blog",
+                                            "description": "Welcome to marketgoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "marketgoo's Blog",
                                             "url": "www.marketgoo.com/blog/page/22/"
                                         },
                                         {
-                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "description": "If you need to improve the SEO for your Squarespace site, marketgoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
                                             "title": "Improve the SEO for your Squarespace Site!",
                                             "url": "www.marketgoo.com/squarespace-seo-best-practices"
                                         },
                                         {
                                             "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
-                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "title": "What is the deal with the robots.txt file? - marketgoo",
                                             "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress/"
                                         },
                                         {
                                             "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
-                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "title": "What is the deal with the robots.txt file? - marketgoo",
                                             "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress"
                                         },
                                         {
                                             "description": "Marketing Web y SEO para PyMEs y Agencias, sin distracciones. Evalúa tu sitio y comienza a optimizar. Prueba gratis 10 días.",
-                                            "title": "MarketGoo - SEO y Marketing Web",
+                                            "title": "marketgoo - SEO y Marketing Web",
                                             "url": "www.marketgoo.com/es/"
                                         },
                                         {
-                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
-                                            "title": "MarketGoo's Blog",
+                                            "description": "Welcome to marketgoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "marketgoo's Blog",
                                             "url": "www.marketgoo.com/es/blog/"
                                         }
                                     ],
@@ -9006,78 +9006,78 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                 "metadata": {
                                     "pages": [
                                         {
-                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "description": "If you need to improve the SEO for your Squarespace site, marketgoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
                                             "title": "Improve the SEO for your Squarespace Site!",
                                             "url": "www.marketgoo.com/squarespace-seo-best-practices/"
                                         },
                                         {
-                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
-                                            "title": "MarketGoo's Blog",
+                                            "description": "Welcome to marketgoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "marketgoo's Blog",
                                             "url": "www.marketgoo.com/blog/"
                                         },
                                         {
                                             "description": "Marketing Web y SEO para PyMEs y Agencias, sin distracciones. Evalúa tu sitio y comienza a optimizar. Prueba gratis 10 días.",
-                                            "title": "MarketGoo - SEO y Marketing Web",
+                                            "title": "marketgoo - SEO y Marketing Web",
                                             "url": "www.marketgoo.com/es"
                                         },
                                         {
-                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
-                                            "title": "MarketGoo's Blog",
+                                            "description": "Welcome to marketgoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "marketgoo's Blog",
                                             "url": "www.marketgoo.com/blog/page/2/"
                                         },
                                         {
-                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
-                                            "title": "MarketGoo's Blog",
+                                            "description": "Welcome to marketgoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "marketgoo's Blog",
                                             "url": "www.marketgoo.com/blog/page/3/"
                                         },
                                         {
-                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
-                                            "title": "MarketGoo's Blog",
+                                            "description": "Welcome to marketgoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "marketgoo's Blog",
                                             "url": "www.marketgoo.com/blog/page/22/"
                                         },
                                         {
-                                            "description": "If you need to improve the SEO for your Squarespace site, MarketGoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
+                                            "description": "If you need to improve the SEO for your Squarespace site, marketgoo is the easiest way to grow your traffic and search engine rankings.How? our personalized",
                                             "title": "Improve the SEO for your Squarespace Site!",
                                             "url": "www.marketgoo.com/squarespace-seo-best-practices"
                                         },
                                         {
                                             "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
-                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "title": "What is the deal with the robots.txt file? - marketgoo",
                                             "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress/"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=Landing&utm_medium=WP&utm_campaign=CTA2"
                                         },
                                         {
                                             "description": "The name robots.txt sounds a little out there, especially when you’re new to SEO. Luckily, it sounds way weirder than it is. Website owners like you use the robots.txt file to give web robots instructions about their site. More specifically, it tells them which parts of your site you don’t want to be accessed by […]",
-                                            "title": "What is the deal with the robots.txt file? - MarketGoo",
+                                            "title": "What is the deal with the robots.txt file? - marketgoo",
                                             "url": "www.marketgoo.com/blog/2016/08/16/robots-txt-weebly-wix-wordpress"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=shopify"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=sslanding&utm_medium=intro&utm_campaign=cms"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=wix"
                                         },
                                         {
                                             "description": "Marketing Web y SEO para PyMEs y Agencias, sin distracciones. Evalúa tu sitio y comienza a optimizar. Prueba gratis 10 días.",
-                                            "title": "MarketGoo - SEO y Marketing Web",
+                                            "title": "marketgoo - SEO y Marketing Web",
                                             "url": "www.marketgoo.com/es/"
                                         },
                                         {
-                                            "description": "Welcome to MarketGoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
-                                            "title": "MarketGoo's Blog",
+                                            "description": "Welcome to marketgoo's Blog! Tips and Insights on easy SEO and Website Marketing for SMBs.",
+                                            "title": "marketgoo's Blog",
                                             "url": "www.marketgoo.com/es/blog/"
                                         }
                                     ],
@@ -9091,22 +9091,22 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "pages": [
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=sslanding&utm_medium=intro&utm_campaign=cms"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=Landing&utm_medium=WP&utm_campaign=CTA2"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=shopify"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=wix"
                                         }
                                     ],
@@ -9127,22 +9127,22 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "pages": [
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=Landing&utm_medium=WP&utm_campaign=CTA2"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=shopify"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=sslanding&utm_medium=intro&utm_campaign=cms"
                                         },
                                         {
                                             "description": "",
-                                            "title": "MarketGoo",
+                                            "title": "marketgoo",
                                             "url": "www.marketgoo.com/signup?utm_source=instapage&utm_medium=landing&utm_campaign=wix"
                                         }
                                     ],
@@ -9276,19 +9276,19 @@ Using the same single account endpoint the **Data API** returns a much richer in
 
 ### Branding Info (object)
 + branding: `mktgoo` - The unique ID for your branding
-+ tag: `MarketGoo` - Internal name for your branding. This not shown to the customers
++ tag: `marketgoo` - Internal name for your branding. This not shown to the customers
 + domain: `apps.marketgoo.com` - Your configured production domain
-+ name: `MarketGoo`
++ name: `marketgoo`
 
     The global branded name of the application. This may be shown to your customers as
     the name of the service in several places of the application. For instance, some
-    sentences shown in the UI may use this name like _`Welcome to MarketGoo!`_.
+    sentences shown in the UI may use this name like _`Welcome to marketgoo!`_.
 
 + company: `MarketGoo Internet, S.L.`
 
     The name of your company. This may be shown to your customers as the name of the
     company offering the service. For instance, some sentences shown in the UI may use
-    this company name like: _`MarketGoo is a service of MarketGoo Internet, S.L.`_.
+    this company name like: _`marketgoo is a service of MarketGoo Internet, S.L.`_.
 
 + website: `https://www.marketgoo.com`
 
@@ -9580,7 +9580,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + country: `us`
 + status: 100
 + pages: 50
-+ home_title: `MarketGoo - Easy SEO Tools for Small Businesses`
++ home_title: `marketgoo - Easy SEO Tools for Small Businesses`
 + home_description: `Improve your SEO, increase your website traffic and rankings with our easy SEO tools ideal for Small Businesses. 10 day free trial!`
 + thumbnail: `fb8a42eaaad1eaf41f73e3643140e8f87a15f057.png`
 
@@ -9739,8 +9739,8 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + total_days: 336 (number)
 
 ### Snippet (object)
-+ title: `Free Website Report - MarketGoo` (string)
-+ description: `In just a few seconds, MarketGoo scans your website and evaluates any technical errors as well as your website marketing and social media presence. You then ...` (string)
++ title: `Free Website Report - marketgoo` (string)
++ description: `In just a few seconds, marketgoo scans your website and evaluates any technical errors as well as your website marketing and social media presence. You then ...` (string)
 + url: `https://www.marketgoo.com/free-website-report/` (string)
 + url_visible: `https://www.marketgoo.com/free-website-report/` (string)
 + last_seen_at: `2017-10-21T17:38:41Z` (string) - Snippet creation date / time
