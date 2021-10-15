@@ -454,6 +454,8 @@ the user is currently using all of the 4 allowed slots for keywords.
 In these cases you can use the `force` attribute to `true` to allow for automatic degradation and the
 system will automatically delete the excess keywords.
 
+**Note for anonymous products:** Anonymous products like those with token "zero" can be created without a user email. In case you want to upgrade any anonymous plan, you need to assign a user email to it before with a [UPDATE](https://marketgoo.docs.apiary.io/#reference/0/working-with-accounts/update-account) call.
+
 ### Upgrade / Downgrade account [PATCH /api/accounts/{uuid}/upgrade]
 
 + Parameters
@@ -1016,13 +1018,12 @@ These are some of the most useful data fields you can obtain from our Data API:
 | `desktop` | Set of values that show metrics of the website displayed on desktop such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with current and historic measures. |
 | `mobile` | Set of values that show metrics about the mobile render such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with present and historic measures. Request information about the existence of a responsive or dedicated mobile page with `dedicated` and `responsive` . |
 | `progress` | Provides information about marketgoo propietary score separated by marketing area. `global` is the end value when `global_onpage` is the score for onpage SEO and the rest of the score parameters are `visitors`, `sitereview`, `search`, `onpage`, `popularity`, and `mobile`. |
+| `progress.overview` | Some useful KPI's to populate your end: `audit`, `optimize`, `popularity`, `pages_pending`, `pages_completed` |
 | `tasks` | Tasks are the number of recommendations our solution provides to the site owner. We provide data on the total number of tasks, the completed ones, pending, manual tasks and tasks with warnings. There are different parameters to gather specific user behaviour on tasks. For example `configurecomp` let you know if the user has fill any competitor. Other interesting task data includes `wwwspeed`as loading time or `sslexists`to check site SSL configuration. Please refer to the list of tasks in the example or ask for detailed information. |
 | `keywords` | This group provides information about keyword data including `search_volume` and `rankings` data on Google, Yahoo and BING. The `snippet` one shows meta information on the different search engine queries. |
 | `results` | Metrics are `alexa_rank`, `popularity` metrics such as total number of backlinks, total number of domains linking back, detail of most relevant `links`. |
 | `competitors` |  Allows to retrieve comparative metrics of the user competitors on the selected keywords but also retrieving `results` data on these competitors for traffic such as `alexa_rank`,`popularity` metrics are backlinks pointing to home or domain. |
 | `submission` | Data to inform whether the site is listed in the different search engines including URL snippet. |
-| `optimizations` | Data relative to current "Optimize for Search" section optimizations. There should be two sub keys: `pending` and `completed` listing either pending or completed optimization respectively. |
-
 ### Get single account with Data API [GET /api/accounts/{uuid}]
 
 Using the same single account endpoint the **Data API** returns a much richer information.
@@ -1630,6 +1631,28 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                 }
                             },
                             "progress": {
+                                "overview": {
+                                    "audit": {
+                                        "kpi": "overview/audit",
+                                        "value": 90
+                                    },
+                                    "optimize": {
+                                        "kpi": "overview/optimize",
+                                        "value": 0
+                                    },
+                                    "popularity": {
+                                        "kpi": "overview/popularity",
+                                        "value": 24
+                                    },
+                                    "pages_pending": {
+                                        "kpi": "overview/pages-pending",
+                                        "value": 11
+                                    },
+                                    "pages_completed": {
+                                        "kpi": "overview/pages-completed",
+                                        "value": 7
+                                    }
+                                },
                                 "scores": {
                                     "global": {
                                         "value": 54,
@@ -8527,34 +8550,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
                                     "order": 8900,
                                     "metadata": null
                                 }
-                            ],
-                            "optimizations": {
-                                "pending": [
-                                    {
-                                        "task_id": 766777,
-                                        "status": 0,
-                                        "progress": 50,
-                                        "url": "/",
-                                        "title": "marketgoo - Easy SEO Tools for Small Businesses",
-                                        "keyword": {
-                                            "id": 50850,
-                                            "keyword": "website report",
-                                            "keyword_pub": "website-report",
-                                            "search_volume": 0,
-                                            "created_at": "2018-04-25T18:32:39Z",
-                                        }
-                                    },
-                                    {
-                                        "task_id": 766778,
-                                        "status": 0,
-                                        "progress": 0,
-                                        "url": "/contact-us",
-                                        "title": "CONTACT US",
-                                        "keyword": null
-                                    }
-                                ],
-                                "completed": []
-                            }
+                            ]
                         }
                     }
                 }
