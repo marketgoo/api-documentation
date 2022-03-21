@@ -1,20 +1,25 @@
 FORMAT: 1A9
 
-# marketgoo Provisioning API
+# marketgoo Provisioning and Data API
 
 The **marketgoo** API is based on REST principles and follows the recommendations
 set forth in the [**json:api** specification](http://jsonapi.org).
 
-The API end-point uses the domain configured as part of your **marketgoo** integration
+The API end-point uses the domain configured as part of your **marketgoo integration**
 with the `/api` prefix at the beginning of the path. We will use the domain
 `app.acmeseo.com/api` as an example end-point domain through this documentation, but
 remember to use your assigned production domain.
+
+The sections below apply both to the Provisioning API and the Data API. This is because
+the Data API is really a sub-set of the Provisioning API. You can read more information
+about the Data API in the *[Data API features](#reference/0/data-api-features)*
+section.
 
 
 # Content types and the json:api basics
 
 The **json:api** specification requires all data to be **JSON**. This means all returned
-entities and requests must be made as **JSON** objects. You are required to use the
+entities and requests must be made as **JSON** objects. You are **required** to use the
 `Accept:` header with a mime type of `application/vnd.marketgoo.api+json` to be considered
 a valid **json:api** request.
 
@@ -25,8 +30,8 @@ find it difficult to override the standard **JSON** mime type of your library.
 
 # Authentication
 
-All calls to the **marketgoo** API must be SSL secured. Also, all API requests must
-be authenticated by using the `X-Auth-Token` header. You must use the provided
+All calls to the **marketgoo** API must be SSL secured. Also, all provisioning API requests
+must be authenticated by using the `X-Auth-Token` header. You must use the provided
 **API Key** in this header.
 
 > ### Important note
@@ -40,7 +45,7 @@ be authenticated by using the `X-Auth-Token` header. You must use the provided
 
 A sample request to the `/api/accounts` endpoint might look like:
 
-```
+```http
 GET /api/accounts HTTP/1.1
 Host: app.acmeseo.com
 X-Auth-Token: 1234567890abcdef
@@ -58,7 +63,7 @@ access **without exposing the private API Key**.
 The call to "Get single account" at `GET /api/account/<UUID>` (see below) accepts an
 `Authorization` header like in the following example:
 
-```
+```http
 GET /api/accounts/<UUID> HTTP/1.1
 Host: app.acmeseo.com
 Authorization: Bearer <Pre-signed JWT Token>
@@ -78,7 +83,7 @@ To construct the JWT token needed for this authentication, please use the **HMAC
 algorithm to sign the JWT body using your **API Key** as secret. The body of the JWT needs
 to include the `uuid` field as shown below:
 
-```
+```json
 {
     "uuid": <UUID>
 }
@@ -87,7 +92,7 @@ to include the `uuid` field as shown below:
 There are several libraries to handle JWT tokens, please see the [JWT website](https://jwt.io)
 for more information. Here you can see an example using PHP with the Firebase JWT library:
 
-```
+```php
 <?php
 
 // Use your preferred JWT library. Firebase used as example.
@@ -100,10 +105,11 @@ $bearer = JWT::encode([
 
 echo $bearer.PHP_EOL;
 ?>
+```
 
----
+The expected output should be like:
 
-Expected output:
+```
 eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiMWNiZDY1YzgxZTY0NjI5MDZjOGY0ZWFmMDI0MTdkM2NhZTY2N2ZmYiJ9.AslfPa8csfWO65asCfr79ErVgrrCPzeuG7LC1GH__vE
 
 ```
@@ -111,7 +117,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiMWNiZDY1YzgxZTY0NjI5MDZjOGY0ZWF
 Using the Bearer from the above example, you can make a request to `GET /api/accounts/<UUID>`
 as follows:
 
-```
+```http
 GET /api/accounts/<UUID> HTTP/1.1
 Host: app.acmeseo.com
 Accept: application/vnd.marketgoo.api+json
@@ -144,7 +150,7 @@ holding meta data about the pagination and a `links` object containing links to 
 
 Example `meta` and `links` object from a paginated response:
 
-```
+```json
 {
     "data": [
         ...
@@ -994,7 +1000,7 @@ returns a `201 Created` response with the SEO Report as payload.
 
 ## Data API features [/api/accounts/{uuid}]
 
-Data API is an optional service included in a higher tier from the standard marketgoo API. The data scheme of the Data API
+Data API is an **optional service included in a higher tier** from the standard marketgoo API. The data scheme of the Data API
 provides deeper and richer information on every account.
 
 For further information ask our **Business Development** team at [partners@marketgoo.com](mailto:partners@marketgoo.com)
@@ -1003,7 +1009,16 @@ Basically, with **Data API** enabled, you can get the current snapshot of all of
 gathered for the website, from the actual Scores to the list of all the tasks. This gives
 you an incredible opportunity to enrich the user experience into your internal user control panels.
 
-These are some of the most useful data fields you can obtain from our Data API:
+The following table shows an overview of the most useful data fields you can obtain from the
+Data API. These fields are from the `data.attributes` JSON you receive from GET requests.
+
+> ### Important note
+>
+> Some of the fields **are not available** to products related to the Tier-0 functionality.
+> Most notably: fields related to external data like incoming links, keywords, etc, are not
+> available because Tier-0 related products doesn't have user interface.
+> Fields that are not available to Tier-0 products are marked with (*)
+
 
 | Field | Description |
 |-------------|-------------|
@@ -1011,19 +1026,29 @@ These are some of the most useful data fields you can obtain from our Data API:
 | `product` | Type of product under marketgoo portfolio. |
 | `product_details` | Some useful info about the product. Includes the `name` of the product and a set of `features` to identify limits and privileges on this specific product. |
 | `domain` | Domain name of the account. |
-| `lang` | Language of the account created. |
-| `thumbnail` | Obtain a png thumbnail of the site. |
-| `config` | Set of values such as `cms` the site is running under, `country` as the target, `webmaster_email` in case it was provided. |
-| `scan` | Set of values about the scanning process. Retrieve `pages_read` that shows how many pages the site has, date of the last scan, detected cms, and detected technology from the site. |
-| `desktop` | Set of values that show metrics of the website displayed on desktop such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with current and historic measures. |
-| `mobile` | Set of values that show metrics about the mobile render such as `width`, `height`,`speed` and `speed_content`, `size` and `size_cached` with present and historic measures. Request information about the existence of a responsive or dedicated mobile page with `dedicated` and `responsive` . |
-| `progress` | Provides information about marketgoo propietary score separated by marketing area. `global` is the end value when `global_onpage` is the score for onpage SEO and the rest of the score parameters are `visitors`, `sitereview`, `search`, `onpage`, `popularity`, and `mobile`. |
-| `progress.overview` | Some useful KPI's to populate your end: `audit`, `optimize`, `popularity`, `pages_pending`, `pages_completed` |
-| `tasks` | Tasks are the number of recommendations our solution provides to the site owner. We provide data on the total number of tasks, the completed ones, pending, manual tasks and tasks with warnings. There are different parameters to gather specific user behaviour on tasks. For example `configurecomp` let you know if the user has fill any competitor. Other interesting task data includes `wwwspeed`as loading time or `sslexists`to check site SSL configuration. Please refer to the list of tasks in the example or ask for detailed information. |
-| `keywords` | This group provides information about keyword data including `search_volume` and `rankings` data on Google, Yahoo and BING. The `snippet` one shows meta information on the different search engine queries. |
-| `results` | Metrics are `alexa_rank`, `popularity` metrics such as total number of backlinks, total number of domains linking back, detail of most relevant `links`. |
-| `competitors` |  Allows to retrieve comparative metrics of the user competitors on the selected keywords but also retrieving `results` data on these competitors for traffic such as `alexa_rank`,`popularity` metrics are backlinks pointing to home or domain. |
-| `submission` | Data to inform whether the site is listed in the different search engines including URL snippet. |
+| `lang` | Language to use for the product UI and related reports (emails, PDF, etc). |
+| `promo` | The promotional code you submitted at the account creation time. |
+| `name` | Name of the user. (might be blank if annonymous) |
+| `email` | Email of the user. (might be blank if annonymous) |
+| `ulid` | Unique ID of the created user. Note that this is different from the account UUID. |
+| `is_configured` (*) | This field is `true` when the user successfully configured the Wizard. |
+| `site.thumbnail` | Name of the generated website thumbnail image for the home page. You must prepend `/thumbnail/` plus different prefixes to get the final URL for displaying the thumbnail based on size and type. Use `desktop` and `mobile` for the type and `medium`, `small`, `thumbnail` for the size. Example of a full URL for a thumbnail is `/thumbnails/desktop/medium/<site.thumbnail>` |
+| `site.config` (*) | Set of values such as `cms` the site is running under, `country` as the target, `webmaster_email` in case it was provided. |
+| `site.scan` | Set of values about the scanning process. Retrieve `pages_read` that shows how many pages the site has, date of the last scan, detected cms, and detected technology from the site. |
+| `site.scan.desktop` | Set of values that show metrics of the website displayed on desktop such as `width`, `height`,`speed`, and `size` with current and historic measures. |
+| `site.scan.mobile` | Set of values that show metrics about the mobile render such as `width`, `height`,`speed`, `size`, with present and historic measures. Request information about the existence of a responsive or dedicated mobile page with `dedicated` and `responsive` . |
+| `site.progress.scores` | Provides information about marketgoo propietary score separated by marketing area. `global` is the end value when `global_onpage` is the score for onpage SEO. |
+| `site.progress.overview` | Some useful KPI's to populate your end: `audit`, `optimize`, `popularity`, `pages_pending`, `pages_completed` |
+| `site.tasks` | Tasks are the number of recommendations our solution provides to the site owner. We provide data on the total number of tasks, the completed ones, pending, manual tasks and tasks with warnings. There are different parameters to gather specific user behaviour on tasks. For example `configurecomp` let you know if the user has fill any competitor. Other interesting task data includes `wwwspeed`as loading time or `sslexists`to check site SSL configuration. Please refer to the list of tasks in the example or ask for detailed information. |
+| `site.suggestions` | Suggestions are the number of recommendations our solution provides to the site owner that are not scanned automatically. Please refer to the list of suggestions in the example or ask for detailed information. |
+| `site.keywords` (*) | This group provides information about keyword data including `search_volume` and `rankings` data on Google, Yahoo and BING. The `snippet` one shows meta information on the different search engine queries. |
+| `site.results` (*) | Metrics are `alexa_rank`, `popularity` metrics such as total number of backlinks, total number of domains linking back, detail of most relevant `links`. |
+| `site.competitors` (*) |  Allows to retrieve comparative metrics of the user competitors on the selected keywords but also retrieving `results` data on these competitors for traffic such as `alexa_rank`,`popularity` metrics are backlinks pointing to home or domain. |
+| `site.submission` (*) | Data to inform whether the site is listed in the different search engines including URL snippet. |
+
+> - Fields marked with **(*)** are not available or undefined in Tier-0 type products.
+
+
 ### Get single account with Data API [GET /api/accounts/{uuid}]
 
 Using the same single account endpoint the **Data API** returns a much richer information.
