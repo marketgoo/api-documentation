@@ -45,7 +45,7 @@ must be authenticated by using the `X-Auth-Token` header. You must use the provi
 
 A sample request to the `/api/accounts` endpoint might look like:
 
-```http
+```
 GET /api/accounts HTTP/1.1
 Host: app.acmeseo.com
 X-Auth-Token: 1234567890abcdef
@@ -63,7 +63,7 @@ access **without exposing the private API Key**.
 The call to "Get single account" at `GET /api/account/<UUID>` (see below) accepts an
 `Authorization` header like in the following example:
 
-```http
+```
 GET /api/accounts/<UUID> HTTP/1.1
 Host: app.acmeseo.com
 Authorization: Bearer <Pre-signed JWT Token>
@@ -83,7 +83,7 @@ To construct the JWT token needed for this authentication, please use the **HMAC
 algorithm to sign the JWT body using your **API Key** as secret. The body of the JWT needs
 to include the `uuid` field as shown below:
 
-```json
+```
 {
     "uuid": <UUID>
 }
@@ -92,7 +92,7 @@ to include the `uuid` field as shown below:
 There are several libraries to handle JWT tokens, please see the [JWT website](https://jwt.io)
 for more information. Here you can see an example using PHP with the Firebase JWT library:
 
-```php
+```
 <?php
 
 // Use your preferred JWT library. Firebase used as example.
@@ -117,7 +117,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiMWNiZDY1YzgxZTY0NjI5MDZjOGY0ZWF
 Using the Bearer from the above example, you can make a request to `GET /api/accounts/<UUID>`
 as follows:
 
-```http
+```
 GET /api/accounts/<UUID> HTTP/1.1
 Host: app.acmeseo.com
 Accept: application/vnd.marketgoo.api+json
@@ -150,7 +150,7 @@ holding meta data about the pagination and a `links` object containing links to 
 
 Example `meta` and `links` object from a paginated response:
 
-```json
+```
 {
     "data": [
         ...
