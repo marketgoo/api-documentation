@@ -269,7 +269,7 @@ You can use the `filter[status]` parameter to query for different Account status
 
 Note that "updating" is not the same as "upgrading" an account. The "update" operation as specified in `Update account` below is only meant to change some properties like `name`, `email`, etc.
 
-### Get multiple accounts [GET /api/accounts?page[limit]={page[limit]}&page[offset]={page[offset]}&filter[status]={filter[status]}&filter[promo]={filter[promo]}}]
+### Get multiple accounts [GET /api/accounts?page[limit]={pagelimit}&page[offset]={pageoffset}&filter[status]={filterstatus}&filter[promo]={filterpromo}}]
 
 + Request
     + Headers
@@ -279,13 +279,13 @@ Note that "updating" is not the same as "upgrading" an account. The "update" ope
             Content-Type: application/vnd.marketgoo.api+json
 
 + Parameters
-    + page[limit]: 10 (number, optional) - Number of accounts to retrieve in each page
+    + pagelimit: 10 (number, optional) - Number of accounts to retrieve in each page
         + Default: 100
-    + page[offset]: 0 (number, optional) - Start listing accounts at this item offset (zero based)
+    + pageoffset: 0 (number, optional) - Start listing accounts at this item offset (zero based)
         + Default: 0
-    + filter[promo]: null (string, optional) - Retrieve accounts matching this promo
+    + filterpromo: null (string, optional) - Retrieve accounts matching this promo
         + Default: null
-    + filter[status]: active (enum[string], optional) - Retrieve accounts matching this status
+    + filterstatus: active (enum[string], optional) - Retrieve accounts matching this status
         + Default: active
         + Members
             + active
@@ -984,7 +984,7 @@ although chances are the Score is the same or very close to.
 depending on the speed of the checked website.
 
 
-### Get multiple SEO Reports [GET /api/reports?page[limit]={page[limit]}&page[offset]={page[offset]}&filter[type]={filter[type]}&filter[promo]={filter[promo]}}]
+### Get multiple SEO Reports [GET /api/reports?page[limit]={pagelimit}&pageoffset={pageoffset}&filter[type]={filtertype}&filter[promo]={filterpromo}}]
 
 + Request
     + Headers
@@ -994,13 +994,13 @@ depending on the speed of the checked website.
             Content-Type: application/vnd.marketgoo.api+json
 
 + Parameters
-    + page[limit]: 10 (number, optional) - Number of reports to retrieve in each page
+    + pagelimit: 10 (number, optional) - Number of reports to retrieve in each page
         + Default: 100
-    + page[offset]: 0 (number, optional) - Start listing reports at this item offset (zero based)
+    + pageoffset: 0 (number, optional) - Start listing reports at this item offset (zero based)
         + Default: 0
-    + filter[promo]: null (string, optional) - Retrieve only reports matching this promo
+    + filterpromo: null (string, optional) - Retrieve only reports matching this promo
         + Default: null
-    + filter[type]: `website-report` (enum[string], optional) - Retrieve only reports matching this type
+    + filtertype: `website-report` (enum[string], optional) - Retrieve only reports matching this type
         + Default: `website-report`
         + Members
             + `website-report`
