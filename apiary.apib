@@ -799,7 +799,7 @@ A page is the representation of an URL within the sitemap. Pages can be listed, 
 
 + Request
     + Headers
-
+    
             X-Auth-Token: 1234567890abcdef
             Accept: application/vnd.marketgoo.api+json
             Content-Type: application/vnd.marketgoo.api+json
@@ -809,6 +809,95 @@ A page is the representation of an URL within the sitemap. Pages can be listed, 
         + data (array[SiteMapPage json])
         + meta (Meta)
         + links (Links pages)
+
+
+### Get single page [GET /api/accounts/{uuid}/page/{id}]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account
+    + id: `42099b4af021e53fd8fd4e056c2568d7c2e3ffa8` (string, required) - ID of the page
+
++ Request
+    + Headers
+    
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + data (SiteMapPage json)
+
++ Response 400 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error get page])
+
+### Link keyword to page [POST /api/accounts/{uuid}/page/{id}/keyword]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account
+    + id: `42099b4af021e53fd8fd4e056c2568d7c2e3ffa8` (string, required) - ID of the page
+
++ Request
+    + Headers
+    
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+            
+    + Attributes
+        + data
+            + type: `keyword` (string, required) - Required json:api item type. Always `keyword`.
+            + attributes (Keyword post parameters)
+
++ Response 204 (application/vnd.marketgoo.api+json)
+
++ Response 400 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error get page])
+
+### Unlink keyword from page [DELETE /api/accounts/{uuid}/page/{id}/keyword]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account
+    + id: `42099b4af021e53fd8fd4e056c2568d7c2e3ffa8` (string, required) - ID of the page
+
++ Request
+    + Headers
+    
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+            
+    + Attributes
+        + data
+            + type: `keyword` (string, required) - Required json:api item type. Always `keyword`.
+            + attributes (Keyword delete parameters)
+
++ Response 204 (application/vnd.marketgoo.api+json)
+
++ Response 400 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error unlink keyword])
+
+### Scan single page [POST /api/accounts/{uuid}/page/{id}/scan]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account
+    + id: `42099b4af021e53fd8fd4e056c2568d7c2e3ffa8` (string, required) - ID of the page
+
++ Request
+    + Headers
+    
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 204 (application/vnd.marketgoo.api+json)
+
++ Response 400 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error get page])
 
 ## Managing end user logins to the App [/api/accounts/{uuid}/login]
 
@@ -9478,6 +9567,20 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + source (object) - This is the parameter that triggered the error
     + pointer: `/data/attributes/competitor` (string)
 
+### Error get page (object)
++ code: 3087 (number) - Numeric error code
++ title: `Page not found` (string) - Error message title
++ detail: `The requested page does not exist!` (string) - Error message detail
++ source (object) - This is the parameter that triggered the error
+    + pointer: `/data/attributes/page_id` (string)
+
+### Error unlink keyword (object)
++ code: 3066 (number) - Numeric error code
++ title: `Keyword not linked` (string) - Error message title
++ detail: `There is no keyword linked!` (string) - Error message detail
++ source (object) - This is the parameter that triggered the error
+    + pointer: `/data/attributes/keyword` (string)
+
 ### Error not found (object)
 + status: 404 (number) - HTTP status
 + title: `Not Found` (string) - Error message title
@@ -9833,8 +9936,11 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + 30400000 (number)
 
 ### Keyword post parameters (object)
-+ name: `website report` (string, required) - The keyword to add
-+ tracked: true (boolean, required) - Add rank tracking to the keyword
++ name: `seo tools` (string, required) - The keyword to add
++ tracked: true (boolean, optional)
+
+### Keyword delete parameters (object)
++ name: `seo tools` (string, required) - The keyword to add
 
 ### Competitor json (object)
 + id: `www.sqsp-review.com` (string)
@@ -9878,7 +9984,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + description: `SEO Tools` (string) - The page meta description.
 + created_at: `2021-11-03T16:47:59Z` (string) - Page creation date / time.
 + task_id: `83131` (string) - The optimization task for this page.
-+ keyword: (PageKeyword base)
++ keyword (PageKeyword base)
 + optimized: `false` (boolean) - Flag indicating if this page has been optimized.
 + progress: `50` (number) - Average progress of the optimization.
 + score: `0.520494` (number) - Average global score.
@@ -9887,9 +9993,9 @@ Using the same single account endpoint the **Data API** returns a much richer in
 ### PageKeyword base (object)
 + id: `easy-seo` (string) - The normalized name of the keyword.
 + name: `Easy SEO` (string) - The original name of the keyword.
-+ is_tracked: `1` (boolean) - Flag indicating if the keyword is tracked.
++ is_tracked: `true` (boolean) - Flag indicating if the keyword is tracked.
 + search_volume: `29` (number) - The search volume of the keyword.
-+ created_at: `2020-10-01T17:15:14Z` (number) - Keyword creation date / time.
++ created_at: `2020-10-01T17:15:14Z` (string) - Keyword creation date / time.
 
 ### Traffic (object)
 + alexa_rank (Ranking Data)
@@ -9916,5 +10022,6 @@ Using the same single account endpoint the **Data API** returns a much richer in
 
 # Changelog
 
+- [2022-09-16] Added Sitemap Pages resources
 - [2018-09-25] Removed "Social" data fields from the API response
 - [2018-06-15] Added 'bearer' tokens to Permanent and Expiring Login end-point
