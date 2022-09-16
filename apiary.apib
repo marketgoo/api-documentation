@@ -787,6 +787,28 @@ With this calls you can retrieve, add or remove competitors from an account.
         + errors (array[Error competitor not found])
 
 
+## Managing Sitemap Pages [/api/accounts/{uuid}/pages]
+
+A page is the representation of an URL within the sitemap. Pages can be listed, filtered and sorted.
+ Every page can have a keyword linked in order to accomplish tasks and move forward in its optimization.
+
+### Get multiple pages [GET /api/accounts/{uuid}/pages]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + data (array[SiteMapPage json])
+        + meta (Meta)
+        + links (Links pages)
 
 ## Managing end user logins to the App [/api/accounts/{uuid}/login]
 
@@ -9491,7 +9513,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
 
 
 ### Meta (object)
-+ total_items: 2 (number) - Total number of items returned
++ total_items: 1 (number) - Total number of items returned
 + total_pages: 1 (number) - Number of pages for the current `limit`
 
 
@@ -9525,6 +9547,12 @@ Using the same single account endpoint the **Data API** returns a much richer in
 ### Links reports (object)
 + first: `https://app.acmeseo.com/api/reports?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the first page of the collection
 + last: `https://app.acmeseo.com/api/reports?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the last page of the collection
++ next (string, nullable) - Link to the next page of the collection
++ prev (string, nullable) - Link to the previous page of the collection
+
+### Links pages (object)
++ first: `https://app.acmeseo.com/api/pages?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the first page of the collection
++ last: `https://app.acmeseo.com/api/pages?page%5Blimit%5D=10&page%5Boffset%5D=0` (string) - Link to the last page of the collection
 + next (string, nullable) - Link to the next page of the collection
 + prev (string, nullable) - Link to the previous page of the collection
 
@@ -9806,6 +9834,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
 
 ### Keyword post parameters (object)
 + name: `website report` (string, required) - The keyword to add
++ tracked: true (boolean, required) - Add rank tracking to the keyword
 
 ### Competitor json (object)
 + id: `www.sqsp-review.com` (string)
@@ -9819,7 +9848,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + attributes (Competitor base)
 
 ### Competitor base (object)
-+ domain: `www.sqsp-review.com` (string)) - Competitor's domain
++ domain: `www.sqsp-review.com` (string) - Competitor's domain
 + created_at: `2016-11-22T16:31:02Z` (string) - Competitor creation date / time
 + checked_at: `2016-11-22T16:31:02Z` (string) - Competitor's last scan date / time
 + thumbnail: `6f471475efb2cd6efacc8c622369a57cd5384904.png` (string)) - Competitor's site thumbnail
@@ -9830,6 +9859,37 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + traffic (Traffic)
 + popularity (Popularity)
 + onpage (Onpage)
+
+### SiteMapPage json (object)
++ id: `42099b4af021e53fd8fd4e056c2568d7c2e3ffa8` (string)
+
+    The hash identifying this page on this account.
+
++ type: page (string)
+
+    Defines the type of the object returned in `attributes`.
+
++ attributes (SiteMapPage base)
+
+### SiteMapPage base (object)
++ id: `42099b4af021e53fd8fd4e056c2568d7c2e3ffa8` (string) - The page hash.
++ url: `/` (string) - The page URL.
++ title: `Easy SEO Tools - marketgoo` (string) - The page title.
++ description: `SEO Tools` (string) - The page meta description.
++ created_at: `2021-11-03T16:47:59Z` (string) - Page creation date / time.
++ task_id: `83131` (string) - The optimization task for this page.
++ keyword: (PageKeyword base)
++ optimized: `false` (boolean) - Flag indicating if this page has been optimized.
++ progress: `50` (number) - Average progress of the optimization.
++ score: `0.520494` (number) - Average global score.
++ page_score: `37.7358` (number) - Average page score.
+
+### PageKeyword base (object)
++ id: `easy-seo` (string) - The normalized name of the keyword.
++ name: `Easy SEO` (string) - The original name of the keyword.
++ is_tracked: `1` (boolean) - Flag indicating if the keyword is tracked.
++ search_volume: `29` (number) - The search volume of the keyword.
++ created_at: `2020-10-01T17:15:14Z` (number) - Keyword creation date / time.
 
 ### Traffic (object)
 + alexa_rank (Ranking Data)
