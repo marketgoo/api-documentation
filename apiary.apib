@@ -669,7 +669,7 @@ The amount of keywords you can track for your account is defined by the product 
 + Response 400 (application/vnd.marketgoo.api+json)
     + Attributes
         + errors (array[Error post keyword])
-        
+
 
 ### Remove a keyword from an existing account [DELETE /api/accounts/{uuid}/keywords/{keyword}]
 
@@ -765,7 +765,7 @@ With this calls you can retrieve, add or remove competitors from an account.
 + Response 400 (application/vnd.marketgoo.api+json)
     + Attributes
         + errors (array[Error post competitor])
-        
+
 
 ### Remove a competitor from an existing account [DELETE /api/accounts/{uuid}/competitors/{competitor}]
 
@@ -792,6 +792,8 @@ With this calls you can retrieve, add or remove competitors from an account.
 A page is the representation of an URL within the sitemap. Pages can be listed, filtered and sorted.
  Every page can have a keyword linked in order to accomplish tasks and move forward in its optimization.
 
+Our AI can provide suggestions for the title and description meta tags, though it requires a keyword to have been linked to the page previously.
+
 ### Get multiple pages [GET /api/accounts/{uuid}/pages]
 
 + Parameters
@@ -799,7 +801,7 @@ A page is the representation of an URL within the sitemap. Pages can be listed, 
 
 + Request
     + Headers
-    
+
             X-Auth-Token: 1234567890abcdef
             Accept: application/vnd.marketgoo.api+json
             Content-Type: application/vnd.marketgoo.api+json
@@ -819,7 +821,7 @@ A page is the representation of an URL within the sitemap. Pages can be listed, 
 
 + Request
     + Headers
-    
+
             X-Auth-Token: 1234567890abcdef
             Accept: application/vnd.marketgoo.api+json
             Content-Type: application/vnd.marketgoo.api+json
@@ -840,11 +842,11 @@ A page is the representation of an URL within the sitemap. Pages can be listed, 
 
 + Request
     + Headers
-    
+
             X-Auth-Token: 1234567890abcdef
             Accept: application/vnd.marketgoo.api+json
             Content-Type: application/vnd.marketgoo.api+json
-            
+
     + Attributes
         + data
             + type: `keyword` (string, required) - Required json:api item type. Always `keyword`.
@@ -864,11 +866,11 @@ A page is the representation of an URL within the sitemap. Pages can be listed, 
 
 + Request
     + Headers
-    
+
             X-Auth-Token: 1234567890abcdef
             Accept: application/vnd.marketgoo.api+json
             Content-Type: application/vnd.marketgoo.api+json
-            
+
     + Attributes
         + data
             + type: `keyword` (string, required) - Required json:api item type. Always `keyword`.
@@ -880,6 +882,41 @@ A page is the representation of an URL within the sitemap. Pages can be listed, 
     + Attributes
         + errors (array[Error unlink keyword])
 
+
+### Obtain AI suggestions for meta tags [POST /api/accounts/{uuid}/page/{id}/ai/tags]
+
++ Parameters
+    + uuid: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string, required) - UUID of the Account
+    + id: `42099b4af021e53fd8fd4e056c2568d7c2e3ffa8` (string, required) - ID of the page
+
++ Request
+    + Headers
+
+            X-Auth-Token: 1234567890abcdef
+            Accept: application/vnd.marketgoo.api+json
+            Content-Type: application/vnd.marketgoo.api+json
+
++ Response 200 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + data (AI metatags)
+
++ Response 404 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error not found])
+
++ Response 409 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error already deleted])
+
++ Response 400 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error get page])
+
++ Response 400 (application/vnd.marketgoo.api+json)
+    + Attributes
+        + errors (array[Error unlink keyword])
+
+
 ### Scan single page [POST /api/accounts/{uuid}/page/{id}/scan]
 
 + Parameters
@@ -888,7 +925,7 @@ A page is the representation of an URL within the sitemap. Pages can be listed, 
 
 + Request
     + Headers
-    
+
             X-Auth-Token: 1234567890abcdef
             Accept: application/vnd.marketgoo.api+json
             Content-Type: application/vnd.marketgoo.api+json
@@ -9601,6 +9638,10 @@ Using the same single account endpoint the **Data API** returns a much richer in
 + title: `Already suspended` (string) - Error message title
 + detail: `The requested account is already suspended` (string) - Error message detail
 
+### Error already deleted (object)
++ status: 409 (number) - HTTP status
++ title: `Account deleted` (string) - Error message title
++ detail: `The requested account is deleted` (string) - Error message detail
 
 ### Error not suspended (object)
 + status: 409 (number) - HTTP status
@@ -9905,7 +9946,7 @@ Using the same single account endpoint the **Data API** returns a much richer in
 
 ### Ranking History (object)
 + daily (Daily series)
-+ weekly (Weekly series) 
++ weekly (Weekly series)
 
 ### Daily series (array)
 + 987000000 (number)
@@ -10022,6 +10063,39 @@ Using the same single account endpoint the **Data API** returns a much richer in
 ### Competitor post parameters (object)
 + domain: `www.sqsp-review.com` (string, required) - The competitor to add
 
+### AI metatags (object)
++ id: `1cbd65c81e6462906c8f4eaf02417d3cae667ffb` (string)
+
+    The unique ID for the Account. This `id` is the same value
+    returned in the `uuid` field of the Account object attributes.
+
++ type: ai_suggestions (string)
+
+    Defines the type of the object returned in `attributes`.
+
++ attributes (AI metatags json)
+
+### AI metatags json (object)
++ response (AI metatags response)
++ tries_left: 10 (number) - Remaining calls for the current day
+
+### AI metatags response (object)
++ title: `Improve Your Website's SEO with marketgoo - SEO Tools & Services` (string) - Suggested meta title for this page
++ description: `marketgoo offers a comprehensive suite of SEO tools and services to help you optimize your website's performance and increase organic traffic. Boost your SEO rankings with marketgoo today!` (string) - Suggested meta description for this page
+
+{
+    "data": {
+        "type": "page",
+        "id": "4874352b20ec8771c957140ca7b4b2e0343947d0",
+        "attributes": {
+            "response": {
+                "title": "Larissa's Insights: Latest Blog Posts by Larissa | Page 9",
+                "description": "Discover the latest blog posts by Larissa on marketgoo's blog. Stay updated with Larissa's insights on SEO, digital marketing, and more. Explore page 9 now!"
+            },
+            "tries_left": 2
+        }
+    }
+}
 
 # Changelog
 
