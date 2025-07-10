@@ -293,7 +293,7 @@ You can use the `filter[status]` parameter to query for different Account status
 
 Note that "updating" is not the same as "upgrading" an account. The "update" operation as specified in `Update account` below is only meant to change some properties like `name`, `email`, etc.
 
-### Get multiple accounts [GET /api/accounts?page[limit]={pagelimit}&page[offset]={pageoffset}&filter[status]={filterstatus}&filter[promo]={filterpromo}]
+### Get multiple accounts [GET /api/accounts?page[limit]={pagelimit}&page[offset]={pageoffset}&filter[status]={filterstatus}&filter[promo]={filterpromo}&filter[domain]={filterdomain}]
 
 + Request
     + Headers
@@ -316,6 +316,7 @@ Note that "updating" is not the same as "upgrading" an account. The "update" ope
             + inactive
             + suspended
     + filterdomain: null (string, optional) - Filter by domain. Exact matching. Domains with and without www are considers as different domains.
+        + Default: null
 
 + Response 200 (application/vnd.marketgoo.api+json)
     + Attributes
@@ -936,10 +937,6 @@ Our AI can provide suggestions for the title and description meta tags, though i
 + Response 400 (application/vnd.marketgoo.api+json)
     + Attributes
         + errors (array[Error get page])
-
-+ Response 400 (application/vnd.marketgoo.api+json)
-    + Attributes
-        + errors (array[Error unlink keyword])
 
 
 ### Scan single page [POST /api/accounts/{uuid}/page/{id}/scan]
@@ -9762,20 +9759,6 @@ Using the same single account endpoint the **Data API** returns a much richer in
 ### AI metatags response (object)
 + title: `Improve Your Website's SEO with marketgoo - SEO Tools & Services` (string) - Suggested meta title for this page
 + description: `marketgoo offers a comprehensive suite of SEO tools and services to help you optimize your website's performance and increase organic traffic. Boost your SEO rankings with marketgoo today!` (string) - Suggested meta description for this page
-
-{
-    "data": {
-        "type": "page",
-        "id": "4874352b20ec8771c957140ca7b4b2e0343947d0",
-        "attributes": {
-            "response": {
-                "title": "Larissa's Insights: Latest Blog Posts by Larissa | Page 9",
-                "description": "Discover the latest blog posts by Larissa on marketgoo's blog. Stay updated with Larissa's insights on SEO, digital marketing, and more. Explore page 9 now!"
-            },
-            "tries_left": 2
-        }
-    }
-}
 
 # Changelog
 
