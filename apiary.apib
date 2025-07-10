@@ -173,6 +173,30 @@ Example `meta` and `links` object from a paginated response:
 > requirements in [RFC 3986](https://tools.ietf.org/html/rfc3986#section-3.4).
 
 
+## Filtering by domain
+
+In addition to pagination parameters, you can filter accounts by domain using the `filter[domain]` parameter. 
+This allows you to search for accounts associated with a specific domain.
+
+For example, to filter accounts by domain:
+
+`filter[domain]=www.test.com`
+
+The domain filter performs an exact match, meaning that `www.test.com` and `test.com` will yield different results. 
+Note that even when filtering by a specific domain, the endpoint returns a collection of results, not necessarily 
+a single account.
+
+Example of a request with domain filtering:
+
+```
+GET /api/accounts?filter[domain]=www.test.com HTTP/1.1
+Host: app.acmeseo.com
+X-Auth-Token: 1234567890abcdef
+Accept: application/vnd.marketgoo.api+json
+Content-Type: application/json
+```
+
+
 # Product and product add-on tokens
 
 The list of available products and add-ons will vary upon your partnership contract with
@@ -291,6 +315,7 @@ Note that "updating" is not the same as "upgrading" an account. The "update" ope
             + active
             + inactive
             + suspended
+    + filterdomain: null (string, optional) - Filter by domain. Exact matching. Domains with and without www are considers as different domains.
 
 + Response 200 (application/vnd.marketgoo.api+json)
     + Attributes
