@@ -1218,6 +1218,66 @@ Data API. These fields are from the `data.attributes` JSON you receive from GET 
 
 > - Fields marked with **(*)** are not available or undefined in Tier-0 type products.
 
+### Description of KPI metric objects
+
+Some values returned by the Data API are KPI's (Key Performance Indicators)
+that provide a quick overview of the metric. An example of a KPI is the
+`popularity` score on the `site.progress.overview` section. A KPI value is
+identified by the `kpi` field, indicating KPI ID.
+
+For simple KPI's as the `site.progress.overview.popularity` the value is
+a simple integer.
+
+```json
+[...]
+"popularity": {
+  "kpi": "overview/popularity",
+  "value": 22
+}
+[...]
+```
+
+However, you can find also KPI's that have a more complex structure, such as
+the `site.progress.scores.global` which is a KPI that has a `value` like a
+simple KPI, but also has a few more fields that provide additional information
+about the KPI, such as `history` and `diff`.
+
+```json
+[...]
+"global": {
+  "kpi": "score/global",
+  "value": 60,
+  "history": {
+    "daily": [ 62, 62, 63, 63, 63, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 ],
+    "weekly": [ 58, 58, 58, 55, 59, 62, 62, 62, 63, 60, null, null ],
+    "monthly": [ 74, 74, 71, 75, 72, 77, 74, 71, 61, 58, 62, 63 ]
+  },
+  "diff": 1,
+  "total_days": 678
+}
+[...]
+```
+
+The additional fields you can find in extended KPI's are:
+
+| Field | Description |
+|-------------|-------------|
+| `history` | Data to show charts or spark lines for `daily`, `weekly` and `monthly` data. |
+| `diff` | Deviation from last month. It can be `null` for the first 30 days, and can be negative. |
+| `total_days` | Total number of days this plan has been active. |
+
+Additional notes on how to interpret the `history` arrays:
+
+- All arrays start at the oldest date. So the `daily[0]` value is **today - length(daily) - 1** days.
+- The `weekly` array is special, because it is calculated as fixed 4 weeks a month.
+  This is to avoid complicated front-end visualizations for calendar months with 5 weeks, etc.
+  It **always displays the last 3 months in groups of 4 weeks**. That's why you can see `null` values
+  at the end of the array, corresponding to the future weeks of the current month.
+- `monthly` arrays can have 12 or 3 months, depending on the KPI.
+- Aggregated values are considered using a `max` function for the series. This is because for most
+  of the KPI's there is no sense to have averaged values. For example keyword rankings: a keyword
+  is ranked #1 or #2 position, but not #1.5 position.
+
 
 ### Get single account with Data API [GET /api/accounts/{uuid}]
 
