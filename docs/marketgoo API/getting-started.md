@@ -1,5 +1,5 @@
 ---
-title: Welcome to marketgoo API documentation
+title: Introduction
 excerpt: This is the documentation for marketgoo API
 hidden: false
 ---
