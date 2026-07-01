@@ -1,11 +1,8 @@
 ---
-title: Welcome to marketgoo
+title: Welcome to marketgoo API documentation
+excerpt: This is the documentation for marketgoo API
 hidden: false
 ---
-<Callout icon="📘" theme="info">
-  **Template:**  Delete this callout and edit this page with your content and links.
-</Callout>
-
 <Cards>
   {/* Edit the props below to customize these components */}
   <Card title="Quick Start" href="#" icon="fa-duotone fa-rocket-launch">Learn how to get started with our product</Card>
