@@ -13654,3 +13654,5 @@ servers:
     description: Example end-point. Replace the host with your assigned production domain.
 security:
   - ApiKey: []
+x-readme:
+  explorer-enabled: false
