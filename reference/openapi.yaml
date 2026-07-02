@@ -434,7 +434,7 @@ paths:
                     title: Forbidden
       summary: Branding configuration
       operationId: brandingConfiguration
-      description: ''
+      description: Returns your current branding configuration
       tags:
         - General information
   /api/me/products:
