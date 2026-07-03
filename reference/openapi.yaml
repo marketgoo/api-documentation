@@ -9674,24 +9674,16 @@ components:
           example: us
           description: >-
             The desired target country for the report. It is the `ISO 3166-1
-            alpha-2` code and
-
-            the full range of countries is accepted.
-
+            alpha-2` code and the full range of countries is accepted.
 
             This parameter is **optional**. It defaults to **your default
-            country** and
-
-            will be replaced with the domain country TLD if there is one.
-
+            country** and will be replaced with the domain country TLD if
+            there is one.
 
             For example, if you **do not provide** any country in the request
-            and the domain
-
-            is `great-britain.co.uk`, the country will be automatically assigned
-            as `gb`,
-
-            regardless of your default configured country.
+            and the domain is `great-britain.co.uk`, the country will be
+            automatically assigned as `gb`, regardless of your default
+            configured country.
         promo:
           type: string
           example: xmas-promo
@@ -9700,25 +9692,13 @@ components:
             purposes.
 
             For example, you can tag reports as `xmas-promo` as part of a
-            Christmas promotion
-
-            so that you can later filter how many reports have been created as
-            part of
-
-            this promotion.
-
+            Christmas promotion so that you can later filter how many reports
+            have been created as part of this promotion.
 
             However, since this is a **free field**, you can also use it to
-            "tag" any internal
-
-            code or ID you might need instead of promotional codes. For example,
-            you can use
-
-            `ABCD-1234` as `promo` in case you might need to link the report to
-            some internal
-
-            code.
-
+            "tag" any internal code or ID you might need instead of promotional
+            codes. For example, you can use `ABCD-1234` as `promo` in case you
+            might need to link the report to some internal code.
 
             The `promo` field is limited to **100 characters** matching
             `[-_a-zA-Z0-9]{100}`.
