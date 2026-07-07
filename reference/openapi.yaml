@@ -4,293 +4,163 @@ info:
   version: 1.0.0
   description: >-
     The **marketgoo** API is based on REST principles and follows the
-    recommendations
-
-    set forth in the [**json:api** specification](http://jsonapi.org).
-
+    recommendations from the [**json:api** specification](http://jsonapi.org).
 
     The API end-point uses the domain configured as part of your **marketgoo
-    integration**
-
-    with the `/api` prefix at the beginning of the path. We will use the domain
-
-    `app.acmeseo.com/api` as an example end-point domain through this
-    documentation, but
-
-    remember to use your assigned production domain.
-
+    integration** with the `/api` prefix at the beginning of the path. We
+    will use the domain `app.acmeseo.com/api` as an example end-point domain
+    through this documentation, but remember to use your assigned production
+    domain.
 
     The sections below apply both to the Provisioning API and the Data API. This
-    is because
-
-    the Data API is really a sub-set of the Provisioning API. You can read more
-    information
-
-    about the Data API in the **Data API features**
-
+    is because the Data API is really a sub-set of the Provisioning API. You
+    can read more information about the Data API in the **Data API features**
     section.
-
 
     # Content types and the json:api basics
 
-
     The **json:api** specification requires all data to be **JSON**. This means
-    all returned
-
-    entities and requests must be made as **JSON** objects. You are **required**
-    to use the
-
-    `Accept:` header with a mime type of `application/vnd.marketgoo.api+json` to
-    be considered
-
-    a valid **json:api** request.
-
+    all returned entities and requests must be made as **JSON** objects. You
+    are **required** to use the `Accept:` header with a mime type of
+    `application/vnd.marketgoo.api+json` to be considered a valid **json:api**
+    request.
 
     The `Content-Type` header is also required to be a mime type of
-    `application/vnd.marketgoo.api+json`,
-
-    but for the `Content-Type` header we also allow for you to use
-    `application/json` if you
-
-    find it difficult to override the standard **JSON** mime type of your
-    library.
-
+    `application/vnd.marketgoo.api+json`, but for the `Content-Type` header we
+    also allow for you to use `application/json` if you find it difficult to
+    override the standard **JSON** mime type of your library.
 
     # Authentication
 
-
     All calls to the **marketgoo** API must be SSL secured. Also, all
-    provisioning API requests
-
-    must be authenticated by using the `X-Auth-Token` header. You must use the
-    provided
-
-    **API Key** in this header.
-
+    provisioning API requests must be authenticated by using the `X-Auth-Token`
+    header. You must use the provided **API Key** in this header.
 
     > ### Important note
-
     >
-
     > This **API Key** provides you with administrative privileges to freely
-    create, delete
-
-    > and manage accounts without restriction so it is very important for your
-    provision
-
-    > software to **keep this API Key as secured as possible**.
-
-
+    > create, delete and manage accounts without restriction so it is very
+    > important for your provision software to **keep this API Key as secured
+    > as possible**.
+    >
     > We will use `1234567890abcdef` as a dummy API Key through this
-    documentation.
-
+    > documentation.
+    >
     > Please be sure to use our provided **API Key** in production.
-
 
     A sample request to the `/api/accounts` endpoint might look like:
 
-
     ```
-
     GET /api/accounts HTTP/1.1
-
     Host: app.acmeseo.com
-
     X-Auth-Token: 1234567890abcdef
-
     Accept: application/vnd.marketgoo.api+json
-
     ```
-
 
     # Pre-signed public Authentication
 
-
     There might be some times you will need to pre-authorize external libraries
-    to access a
-
-    certain account to read Data API information (see "Data API features"
-    below). Some examples
-
-    might include a WordPress Plugin, a cPanel host or some script you want to
-    give Data API
-
-    access **without exposing the private API Key**.
-
+    to access a certain account to read Data API information (see "Data API
+    features" below). Some examples might include a WordPress Plugin, a cPanel
+    host or some script you want to give Data API access **without exposing
+    the private API Key**.
 
     The call to "Get single account" at `GET /api/account/<UUID>` (see below)
-    accepts an
-
-    `Authorization` header like in the following example:
-
+    accepts an `Authorization` header like in the following example:
 
     ```
-
     GET /api/accounts/<UUID> HTTP/1.1
-
     Host: app.acmeseo.com
-
     Authorization: Bearer <Pre-signed JWT Token>
-
     Accept: application/vnd.marketgoo.api+json
-
     ```
-
 
     The `<Pre-signed JWT Token>` bearer is similar in concept to an **OAuth2
-    permanent token**.
-
-    Your provision software can **sign this token using the API Key** and pass
-    it along
-
-    the `<UUID>` to the external software. Then this external software is free
-    to store the
-
-    token and use it in the `Authentication:` header to access the account
-    information.
-
+    permanent token**. Your provision software can **sign this token using
+    the API Key** and pass it along the `<UUID>` to the external software.
+    Then this external software is free to store the token and use it in the
+    `Authentication:` header to access the account information.
 
     JWT stands for "JSON Web Tokens", and it's a RFC 7519 standard for
     representing claims.
 
     Please see the [RFC-7519 standard](https://tools.ietf.org/html/rfc7519) and
-    the
-
-    [JWT website](https://jwt.io) for more information.
-
+    the [JWT website](https://jwt.io) for more information.
 
     To construct the JWT token needed for this authentication, please use the
-    **HMACSHA256**
-
-    algorithm to sign the JWT body using your **API Key** as secret. The body of
-    the JWT needs
-
-    to include the `uuid` field as shown below:
-
+    **HMACSHA256** algorithm to sign the JWT body using your **API Key** as
+    secret. The body of the JWT needs to include the `uuid` field as shown
+    below:
 
     ```
-
     {
         "uuid": <UUID>
     }
-
     ```
-
 
     There are several libraries to handle JWT tokens, please see the [JWT
-    website](https://jwt.io)
-
-    for more information. Here you can see an example using PHP with the
-    Firebase JWT library:
-
+    website](https://jwt.io) for more information. Here you can see an
+    example using PHP with the Firebase JWT library:
 
     ```
-
     <?php
 
-
     // Use your preferred JWT library. Firebase used as example.
-
     use Firebase\JWT\JWT;
 
-
     // Pre-sign the JWT using your API Key with "HS256" algorithm
-
     $bearer = JWT::encode([
         "uuid" => "1cbd65c81e6462906c8f4eaf02417d3cae667ffb"
     ], "1234567890abcdef", "HS256");
 
-
     echo $bearer.PHP_EOL;
 
-    ?>
-
     ```
-
 
     The expected output should be like:
 
-
     ```
-
     eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiMWNiZDY1YzgxZTY0NjI5MDZjOGY0ZWFmMDI0MTdkM2NhZTY2N2ZmYiJ9.AslfPa8csfWO65asCfr79ErVgrrCPzeuG7LC1GH__vE
-
-
     ```
-
-
     Using the Bearer from the above example, you can make a request to `GET
-    /api/accounts/<UUID>`
-
-    as follows:
-
+    /api/accounts/<UUID>` as follows:
 
     ```
-
     GET /api/accounts/<UUID> HTTP/1.1
-
     Host: app.acmeseo.com
-
     Accept: application/vnd.marketgoo.api+json
-
-    Authorization: Bearer
-    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiMWNiZDY1YzgxZTY0NjI5MDZjOGY0ZWFmMDI0MTdkM2NhZTY2N2ZmYiJ9.AslfPa8csfWO65asCfr79ErVgrrCPzeuG7LC1GH__vE
-
+    Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiMWNiZDY1YzgxZTY0NjI5MDZjOGY0ZWFmMDI0MTdkM2NhZTY2N2ZmYiJ9.AslfPa8csfWO65asCfr79ErVgrrCPzeuG7LC1GH__vE
     ```
-
 
     # Pagination
 
-
     Requests that may return several items are paginated. You can paginate by
-    using the `page`
-
-    object as specified in the [**json:api**
+    using the `page` object as specified in the [**json:api**
     specification](http://jsonapi.org/format/#fetching-pagination).
 
-
     Pages are specified by `page[limit]` and `page[offset]` parameters.
-    `page[limit]` specifies
-
-    how many items you want in each page. By default we return **100** items per
-    page, with a
-
-    upper limit of **1000** items. The `page[offset]` parameter specifies the
-    first item to
-
-    fetch. The **offset** is zero based, and it works pretty much like the
-    `limit` / `offset`
-
-    parameters of a SQL Query.
-
+    `page[limit]` specifies how many items you want in each page. By default
+    we return **100** items per page, with a upper limit of **1000** items.
+    The `page[offset]` parameter specifies the first item to fetch. The
+    **offset** is zero based, and it works pretty much like the `limit` /
+    `offset` parameters of a SQL Query.
 
     For example, to get the first page of items where each page contains 10
     items you might use:
 
-
     `page[limit]=10 & page[offset]=0`
-
 
     To get the second page:
 
-
     `page[limit]=10 & page[offset]=10`
 
-
     To help you with pagination, each response of a paginated request contains a
-    `meta` object
-
-    holding meta data about the pagination and a `links` object containing links
-    to the **next**,
-
-    **previous**, **first** and **last** pages.
-
+    `meta` object holding meta data about the pagination and a `links` object
+    containing links to the **next**, **previous**, **first** and **last** pages.
 
     Example `meta` and `links` object from a paginated response:
 
-
     ```
-
     {
         "data": [
             ...
@@ -306,78 +176,46 @@ info:
             "next": "https://app.acmeseo.com/api/accounts?page[limit]=10&page[offset]=10"
         }
     }
-
     ```
 
-
     > **NOTE** The example query parameters above use unencoded `[` and `]`
-    characters simply
-
-    > for readability. In practice, these characters must be percent-encoded,
-    per the
-
-    > requirements in [RFC
-    3986](https://tools.ietf.org/html/rfc3986#section-3.4).
-
+    > characters simply for readability. In practice, these characters must be
+    > percent-encoded, per the requirements in [RFC 3986](https://tools.ietf.org/html/rfc3986#section-3.4).
 
     ## Filtering by domain
 
-
     In addition to pagination parameters, you can filter accounts by domain
-    using the `filter[domain]` parameter. 
-
-    This allows you to search for accounts associated with a specific domain.
-
+    using the `filter[domain]` parameter. This allows you to search for accounts
+    associated with a specific domain.
 
     For example, to filter accounts by domain:
 
-
     `filter[domain]=www.test.com`
 
-
     The domain filter performs an exact match, meaning that `www.test.com` and
-    `test.com` will yield different results. 
-
-    Note that even when filtering by a specific domain, the endpoint returns a
-    collection of results, not necessarily 
-
-    a single account.
-
+    `test.com` will yield different results. Note that even when filtering by a
+    specific domain, the endpoint returns a collection of results, not
+    necessarily a single account.
 
     Example of a request with domain filtering:
 
-
     ```
-
     GET /api/accounts?filter[domain]=www.test.com HTTP/1.1
-
     Host: app.acmeseo.com
-
     X-Auth-Token: 1234567890abcdef
-
     Accept: application/vnd.marketgoo.api+json
-
     Content-Type: application/json
-
     ```
-
 
     # Product and product add-on tokens
 
-
     The list of available products and add-ons will vary upon your partnership
-    contract with
+    contract with marketgoo. We use the example product token `evolution` and
+    an example add-on token `keyword10` only for documentation purposes. You
+    can view your actual list of available product and add-on tokens by using
+    the "**General information**" operations "**Get available products**" and
+    "**Get available product add-ons**" in the reference below.
 
-    marketgoo. We use the example product token `evolution` and an example
-    add-on token
-
-    `keyword10` only for documentation purposes. You can view your actual list
-    of available
-
-    product and add-on tokens by using the "**General information**" operations
-    "**Get available
-
-    products**" and "**Get available product add-ons**" in the reference below.
 paths:
   /api/me:
     get:
@@ -6876,7 +6714,6 @@ paths:
       description: >-
         Returns a single account by UUID.
 
-
         With **Data API** access the response includes much richer information —
         site configuration and scan results, keywords with rankings,
         competitors, KPI results and optimization tasks — as shown in the
@@ -8599,26 +8436,18 @@ paths:
         Sending a POST request to create a new SEO Report will yield one of two
         different objects:
 
-
         * If the request will CREATE a new SEO Report, or will REFRESH an
-        existent SEO Report, it
-
-        returns a `202 Accepted` status code and creates a new "SEO Report
-        Request" (returned in the
-
-        body payload and in the `Content-Location` header). You are required to
-        **poll** the endpoint
-
-        returned in the `Content-Location` header regularly until the Report is
-        created.
+        existent SEO Report, it returns a `202 Accepted` status code and
+        creates a new "SEO Report Request" (returned in the body payload
+        and in the `Content-Location` header). You are required to **poll**
+        the endpoint returned in the `Content-Location` header regularly
+        until the Report is created.
 
         (See "Get SEO Report Request Status")
 
-
-        * If the request is for a cached domain and **will not** create a new
-        SEO Report request, it
-
-        returns a `201 Created` response with the SEO Report as payload.
+        * If the request is for a cached domain and **will not** create a
+        new SEO Report request, it returns a `201 Created` response with
+        the SEO Report as payload.
       tags:
         - SEO Reports
       requestBody:
@@ -8804,25 +8633,17 @@ components:
           example: marketgoo
           description: >-
             The global branded name of the application. This may be shown to
-            your customers as
-
-            the name of the service in several places of the application. For
-            instance, some
-
-            sentences shown in the UI may use this name like _`Welcome to
-            marketgoo!`_.
+            your customers as the name of the service in several places of
+            the application. For instance, some sentences shown in the UI
+            may use this name like _`Welcome to marketgoo!`_.
         company:
           type: string
           example: MarketGoo Internet, S.L.
           description: >-
             The name of your company. This may be shown to your customers as the
-            name of the
-
-            company offering the service. For instance, some sentences shown in
-            the UI may use
-
-            this company name like: _`marketgoo is a service of MarketGoo
-            Internet, S.L.`_.
+            name of the company offering the service. For instance, some
+            sentences shown in the UI may use this company name like:
+              _`marketgoo is a service of MarketGoo Internet, S.L.`_.
         website:
           type: string
           example: https://www.marketgoo.com
@@ -8832,46 +8653,29 @@ components:
           example: en
           description: >-
             The default language for your customers. This language setting will
-            be used as
-
-            the default language for new accounts. It is the `ISO 639-1`
-            language code and
-
-            currently it is limited to the following available languages:
-
+            be used as the default language for new accounts. It is the
+            `ISO 639-1` language code and currently it is limited to the
+            following available languages:
 
             | ISO 639-1 | Language           |
-
             |:----------|:-------------------|
-
             |    en     | English (American) |
-
             |    gb     | English (British)  |
-
             |    de     | Deutsch            |
-
             |    es     | Español (España)   |
-
             |    nl     | Nederlands         |
-
             |    pt     | Português          |
-
             |    fr     | Français           |
-
             |    da     | Dansk              |
-
             |    sv     | Svenska            |
         country:
           type: string
           example: us
           description: >-
             The default country for your customers. This country setting will be
-            used as
-
-            the default country for new accounts. It is the `ISO 3166-1 alpha-2`
-            code and
-
-            the full range of countries is accepted.
+            used as the default country for new accounts. It is the
+            `ISO 3166-1 alpha-2` code and the full range of countries is
+            accepted.
     ProductFeatures:
       type: object
       properties:
@@ -8911,17 +8715,13 @@ components:
           example: evolution
           description: >-
             The unique ID of the product. This might be referred as the "product
-            token"
-
-            in this API documentation.
+            token" in this API documentation.
         name:
           type: string
           example: Evolution
           description: >-
             Visible name of the product. This name might be shown to the user in
-            some parts
-
-            of the user UI.
+            some parts of the user UI.
         trial_period:
           type: number
           example: 10
@@ -8958,9 +8758,7 @@ components:
           example: keyword10
           description: >-
             The token name of the product add-on. This might be referred as the
-            "add-on token"
-
-            in this API documentation.
+            "add-on token" in this API documentation.
         name:
           type: string
           example: Additional 10 keyword package
@@ -9333,10 +9131,8 @@ components:
           type: boolean
           description: >-
             This is a `boolean` field that flags active user interaction of the
-            tool. If this field is `true`,
-
-            the user has passed and configured the initial Wizard, marking the
-            active usage of the product.
+            tool. If this field is `true`, the user has passed and configured
+            the initial Wizard, marking the active usage of the product.
         product:
           type: string
           example: evolution
@@ -9380,49 +9176,22 @@ components:
           example: fb8a42eaaad1eaf41f73e3643140e8f87a15f057.png
           description: >-
             Thumbnail filename. Use the following table to prefix this filename
-            and get
+            and get the correct thumbnail size and type:
 
-            the correct thumbnail size and type:
-
-
-            | Type    | Size                  | Prefix path                    
-            |
-
+            | Type    | Size                  | Prefix path                     |
             |---------|-----------------------|---------------------------------|
-
-            | Desktop | Medium (400x300)      | /thumbnails/desktop/medium     
-            |
-
-            | Desktop | Small (200x150)       | /thumbnails/desktop/small      
-            |
-
-            | Desktop | Thumbnail (100x75)    | /thumbnails/desktop/thumbnail  
-            |
-
-            | Mobile  | Medium (320x568)      | /thumbnails/mobile/medium      
-            |
-
-            | Mobile  | Small (160x284)       | /thumbnails/mobile/small       
-            |
-
-            | Mobile  | Thumbnail (80x142)    | /thumbnails/mobile/thumbnail   
-            |
-
-            | Tablet  | Medium (400x300)      | /thumbnails/tablet/medium      
-            |
-
-            | Tablet  | Small (200x150)       | /thumbnails/tablet/small       
-            |
-
-            | Tablet  | Thumbnail (100x75)    | /thumbnails/tablet/thumbnail   
-            |
-
+            | Desktop | Medium (400x300)      | /thumbnails/desktop/medium      |
+            | Desktop | Small (200x150)       | /thumbnails/desktop/small       |
+            | Desktop | Thumbnail (100x75)    | /thumbnails/desktop/thumbnail   |
+            | Mobile  | Medium (320x568)      | /thumbnails/mobile/medium       |
+            | Mobile  | Small (160x284)       | /thumbnails/mobile/small        |
+            | Mobile  | Thumbnail (80x142)    | /thumbnails/mobile/thumbnail    |
+            | Tablet  | Medium (400x300)      | /thumbnails/tablet/medium       |
+            | Tablet  | Small (200x150)       | /thumbnails/tablet/small        |
+            | Tablet  | Thumbnail (100x75)    | /thumbnails/tablet/thumbnail    |
 
             Add this thumbnail filename to the prefix path to create the final
-            URL path to
-
-            the desired thumbnail type and size. For example:
-
+            URL path to the desired thumbnail type and size. For example:
 
             `https://app.acmeseo.com/thumbnails/desktop/medium/fb8a42eaaad1eaf41f73e3643140e8f87a15f057.png`
       additionalProperties: true
@@ -9523,33 +9292,19 @@ components:
           example: en
           description: >-
             The desired language for the account. It is the `ISO 639-1` language
-            code and
-
-            currently it is limited to the following available languages:
-
+            code and currently it is limited to the following available languages:
 
             | ISO 639-1 | Language           |
-
             |:----------|:-------------------|
-
             |    en     | English (American) |
-
             |    gb     | English (British)  |
-
             |    de     | Deutsch            |
-
             |    es     | Español (España)   |
-
             |    nl     | Nederlands         |
-
             |    pt     | Português          |
-
             |    fr     | Français           |
-
             |    da     | Dansk              |
-
             |    sv     | Svenska            |
-
 
             This parameter is **optional** and it defaults to **your configured
             language**.
@@ -9558,10 +9313,7 @@ components:
           example: us
           description: >-
             The desired country for the account. It is the `ISO 3166-1 alpha-2`
-            code and
-
-            the full range of countries is accepted.
-
+            code and the full range of countries is accepted.
 
             This parameter is **optional** and it defaults to **your configured
             country**.
@@ -9573,25 +9325,13 @@ components:
             purposes.
 
             For example, you can tag accounts as `xmas-promo` as part of a
-            Christmas promotion
-
-            so that you can later filter how many accounts have been created as
-            part of
-
-            this promotion.
-
+            Christmas promotion so that you can later filter how many accounts
+            have been created as part of this promotion.
 
             However, since this is a **free field**, you can also use it to
-            "tag" any internal
-
-            code or ID you might need instead of promotional codes. For example,
-            you can use
-
-            `ABCD-1234` as `promo` in case you might need to link the account to
-            some internal
-
-            code.
-
+            "tag" any internal code or ID you might need instead of
+            promotional codes. For example, you can use `ABCD-1234` as `promo`
+            in case you might need to link the account to some internal code.
 
             The `promo` field is limited to **100 characters** matching
             `[-_a-zA-Z0-9]{100}`.
@@ -9639,19 +9379,12 @@ components:
           type: boolean
           description: >-
             If the downgrade fails because new unmet requirements, use this
-            parameters to force
-
-            the downgrade. This can happen if the new product plan have more
-            restrictive tiers,
-
-            for example number of keywords allowed, and the currect plan have
-            more than allowed
-
-            resources. **Use with caution**: Forcing a downgrade will result in
-            the excess of
-
-            keywords / competitors / resources be deleted to meet the new
-            requirements.
+            parameters to force the downgrade. This can happen if the new
+            product plan have more restrictive tiers, for example number
+            of keywords allowed, and the currect plan have more than allowed
+            resources. **Use with caution**: Forcing a downgrade will result
+            in the excess of keywords / competitors / resources be deleted
+            to meet the new requirements.
     ReportPostParameters:
       type: object
       required:
@@ -9666,9 +9399,8 @@ components:
           example: john@doe.com
           description: >-
             The email of the user to send the report to. Leave blank (do not
-            include it in the
-
-            payload) if you don't want to send an email to the user.
+            include it in the payload) if you don't want to send an email
+            to the user.
         country:
           type: string
           example: us
