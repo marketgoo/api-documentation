@@ -16,7 +16,7 @@ Data API is really a sub-set of the Provisioning API. You can read more informat
 the Data API in the **Data API features** section in the API Reference.
 
 <Cards>
-  <Card title="API Reference" href="#" icon="fa-duotone fa-code-simple">
+  <Card title="API Reference" href="https://docs.marketgoo.com/reference/" icon="fa-duotone fa-code-simple">
     Explore endpoints and build your integration with marketgoo
   </Card>
 </Cards>
