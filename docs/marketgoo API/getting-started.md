@@ -20,7 +20,3 @@ the Data API in the **Data API features** section in the API Reference.
     Explore endpoints and build your integration with marketgoo
   </Card>
 </Cards>
-
-<br />
-
-<br />
